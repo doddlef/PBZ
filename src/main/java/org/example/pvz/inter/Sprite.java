@@ -14,6 +14,7 @@ public abstract class Sprite implements GameObject{
     private boolean alive = true;
     private boolean toRight = true;
     private GameScene gameScene;
+    private Rectangle2D bounds;
 
     private List<List<Image>> animations = new ArrayList<>();
     private int animationIndex = 0;
@@ -29,6 +30,15 @@ public abstract class Sprite implements GameObject{
         this.y = y;
         this.width = width;
         this.height = height;
+        this.bounds = new Rectangle2D(x, y, width, height);
+    }
+
+    public Sprite(double x, double y, double width, double height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.bounds = new Rectangle2D(x, y, width, height);
     }
 
     @Override
@@ -62,6 +72,11 @@ public abstract class Sprite implements GameObject{
             gameScene.getGraphicsContext().drawImage(animations.get(animationIndex).get(frameIndex),
                     x+width, y, -width, height);
         }
+    }
+
+    @Override
+    public void update() {
+        this.bounds = new Rectangle2D(x, y, width, height);
     }
 
     public double getX() {
@@ -120,8 +135,8 @@ public abstract class Sprite implements GameObject{
         this.animationIndex = animationIndex;
     }
 
-    public Rectangle2D getRect(){
-        return new Rectangle2D(x, y, width, height);
+    public Rectangle2D getBounds(){
+        return bounds;
     }
 
     public boolean isToRight() {

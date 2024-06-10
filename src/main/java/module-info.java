@@ -2,6 +2,7 @@ module org.example.pvz {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires java.compiler;
 
 
     opens org.example.pvz to javafx.fxml;

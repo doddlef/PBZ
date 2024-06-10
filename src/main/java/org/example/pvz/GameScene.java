@@ -9,8 +9,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import org.example.pvz.inter.Plant;
-import org.example.pvz.inter.PlantController;
+import org.example.pvz.inter.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GameScene {
     public static final double CANVAS_WIDTH = 1000, CANVAS_HEIGHT = 600;
@@ -23,10 +26,14 @@ public class GameScene {
             event -> update()));
     private boolean running = false;
     private GameDirector gameDirector;
+
     private PlantController controllerA;
     private PlantController controllerB;
+    private List<Box> boxes = new LinkedList<>();
+    private List<Bullet> bullets = new LinkedList<>();
 
-    private Plant plantA = new PeaShooter(20, 20);
+    private Plant plantA = new PeaShooter(300, 40);
+    private Plant plantB = new PeaShooter(600, 40);
 
     public GameScene(GameDirector gameDirector) {
         this.gameDirector = gameDirector;
@@ -46,24 +53,64 @@ public class GameScene {
         controllerA = LocalPlantController.getLocalPlayerOne();
         controllerA.setPlant(plantA);
 
+        plantB.setGameScene(this);
+        plantB.setTeamTag(2);
+        controllerB = LocalPlantController.getLocalPlayerTwo();
+        controllerB.setPlant(plantB);
+
+        Box platform = new Platform(300, 325, 400, 50);
+        platform.setGameScene(this);
+        boxes.add(platform);
+
+        Box base = new Platform(100, 570, 800, 100);
+        base.setGameScene(this);
+        boxes.add(base);
+
+        Box test = new Platform(300, 540, 50, 30);
+        test.setGameScene(this);
+        boxes.add(test);
+
         resume();
 
-        plantA.update();
         pen.setFill(Color.RED);
-        plantA.paint();
     }
 
     private void update(){
         plantA.update();
+        plantB.update();
+
+        Iterator<Box> iterator = boxes.iterator();
+        while(iterator.hasNext()){
+            Box box = iterator.next();
+            if(box.isAlive()){
+                box.update();
+            } else{
+                iterator.remove();
+            }
+        }
+
+        Iterator<Bullet> iterator2 = bullets.iterator();
+        while(iterator2.hasNext()){
+            Bullet bullet = iterator2.next();
+//            updateBulletCollide(bullet);
+            if(bullet.isAlive()){
+                bullet.update();
+            } else {
+                iterator2.remove();
+            }
+        }
 
         // paint
         pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         plantA.paint();
+        plantB.paint();
+        boxes.forEach(Box::paint);
+        bullets.forEach(Bullet::paint);
     }
 
     private void keyProcess(KeyEvent event){
         controllerA.reactKeyEvent(event);
-//        controllerB.reactKeyEvent(event);
+        controllerB.reactKeyEvent(event);
     }
 
     public void resume() {
@@ -84,5 +131,36 @@ public class GameScene {
 
     public StackPane getRoot() {
         return root;
+    }
+
+    public List<Box> collideBox(Plant plant){
+        List<Box> result = new LinkedList<>();
+        for(Box box : boxes){
+            if(box.getBounds().intersects(plant.getBounds())){
+                result.add(box);
+            }
+        }
+        return result;
+    }
+
+    private void updateBulletCollide(Bullet bullet){
+        if(!bullet.isAlive()) return;
+        if(bullet.getBounds().intersects(plantA.getBounds())) bullet.collide(plantA);
+        if(bullet.getBounds().intersects(plantB.getBounds())) bullet.collide(plantB);
+
+        for(Box box : boxes){
+            if (box.getBounds().intersects(bullet.getBounds()))
+                box.collide(bullet);
+        }
+    }
+
+    public void addBullet(Bullet bullet){
+        bullet.setGameScene(this);
+        bullets.add(bullet);
+    }
+
+    public Plant getOtherPlant(int teamTag){
+        if(teamTag == 1) return plantB;
+        else if(teamTag == 2) return plantA;
     }
 }
