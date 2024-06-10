@@ -9,4 +9,6 @@ module org.example.pvz {
     exports org.example.pvz;
     exports org.example.pvz.inter;
     opens org.example.pvz.inter to javafx.fxml;
+    exports org.example.pvz.box;
+    opens org.example.pvz.box to javafx.fxml;
 }

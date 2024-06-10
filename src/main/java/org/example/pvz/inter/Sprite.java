@@ -55,16 +55,11 @@ public abstract class Sprite implements GameObject{
         }
 
         if(frameIndex >= animations.get(animationIndex).size()){
-            animationIndex = 0;
             frameIndex = 0;
         }
 
-        if(this.x + width < 0 || this.x >= GameScene.CANVAS_WIDTH
-                || this.y - height< 0 || this.y >= GameScene.CANVAS_HEIGHT){
-            this.alive = false;
-        }
-
-        gameScene.getGraphicsContext().fillRect(x, y, this.width, this.height);
+        gameScene.getGraphicsContext().fillRect(this.bounds.getMinX(), this.bounds.getMinY(),
+                this.bounds.getWidth(), this.bounds.getHeight());
         if(this.toRight){
             gameScene.getGraphicsContext().drawImage(animations.get(animationIndex).get(frameIndex),
                     x, y, width, height);
@@ -76,7 +71,11 @@ public abstract class Sprite implements GameObject{
 
     @Override
     public void update() {
-        this.bounds = new Rectangle2D(x, y, width, height);
+        if(this.x + width < 0 || this.x >= GameScene.CANVAS_WIDTH
+                || this.y + height < 0 || this.y >= GameScene.CANVAS_HEIGHT){
+            this.alive = false;
+        }
+        this.resetBounds();
     }
 
     public double getX() {
@@ -139,6 +138,10 @@ public abstract class Sprite implements GameObject{
         return bounds;
     }
 
+    public void resetBounds(){
+        this.bounds = new Rectangle2D(x, y, width, height);
+    }
+
     public boolean isToRight() {
         return toRight;
     }
@@ -153,5 +156,9 @@ public abstract class Sprite implements GameObject{
 
     public void setGameScene(GameScene gameScene) {
         this.gameScene = gameScene;
+    }
+
+    public void setBounds(Rectangle2D bounds) {
+        this.bounds = bounds;
     }
 }

@@ -36,4 +36,13 @@ public class Bullet extends Sprite{
     public int getDamage(){
         return 0;
     }
+
+    @Override
+    public void update() {
+        super.update();
+        List<Box> collided = getGameScene().collideBox(this);
+        if(!collided.isEmpty()) {
+            this.kill();
+        }
+    }
 }

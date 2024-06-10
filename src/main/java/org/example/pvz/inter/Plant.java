@@ -5,9 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.pvz.Const;
 import org.example.pvz.GameScene;
-import org.example.pvz.PeaShooter;
+import org.example.pvz.stick.Pumpkin;
 
-import javax.annotation.processing.ProcessingEnvironment;
 import java.util.List;
 
 public abstract class Plant extends Sprite{
@@ -21,11 +20,17 @@ public abstract class Plant extends Sprite{
 
     private int maxHp;
     private int currentHp;
+    private int currentShield;
+    private boolean isDefended = false;
+    private boolean shieldBroken = false;
+
+    private Pumpkin pumpkin = new Pumpkin();
 
     public Plant(List<List<Image>> animations, double x, double y, double width, double height, int maxHp) {
         super(animations, x, y, width, height);
         this.maxHp = maxHp;
         this.currentHp = this.maxHp;
+        this.currentShield = Const.MAX_SHIELD;
     }
 
     public void setLeft(boolean left) {
@@ -37,7 +42,7 @@ public abstract class Plant extends Sprite{
     }
 
     public void jump(){
-        if(!jumped){
+        if(!jumped && isFree){
             jumped = true;
             offGround();
             ySpeed = -Const.JUMP_SPEED;
@@ -49,10 +54,15 @@ public abstract class Plant extends Sprite{
     }
 
     public void defend(){
+        if(this.currentShield > 0 && !this.shieldBroken){
+            this.isDefended = true;
+            this.isFree = false;
+        }
     }
 
     public void defendRelease(){
-
+        this.isDefended = false;
+        this.isFree = true;
     }
 
     public int getTeamTag() {
@@ -75,6 +85,18 @@ public abstract class Plant extends Sprite{
 
     public void offGround(){
         onGround = false;
+    }
+
+    public void updateStatus(){
+        if(!this.isDefended && currentShield < Const.MAX_SHIELD){
+            this.currentShield++;
+        }
+        if(this.currentShield == Const.MAX_SHIELD){
+            this.shieldBroken = false;
+        }
+        if(this.getY() > GameScene.CANVAS_HEIGHT || this.currentHp <= 0) {
+            this.kill();
+        }
     }
 
     @Override
@@ -111,7 +133,8 @@ public abstract class Plant extends Sprite{
 
         // vertical move
         setY(getY() + ySpeed);
-        super.update();
+
+        resetBounds();
 
         // check horizontal status
         if(this.getX() < 0) this.setX(0);
@@ -125,6 +148,10 @@ public abstract class Plant extends Sprite{
                 box.collide(this, oldX, oldY);
             }
         }
+
+        resetBounds();
+
+        updateStatus();
     }
 
     @Override
@@ -135,17 +162,39 @@ public abstract class Plant extends Sprite{
         if(getTeamTag() == 1) {
             pen.save();
             pen.setFill(Color.YELLOW);
-            pen.fillRect(60, 0, 206, 27);
+            pen.fillRect(0, 0, 406, 27);
             pen.setFill(Color.RED);
-            pen.fillRect( 63, 2, 200 * getCurrentHp()/ getMaxHp(), 25);
+            pen.fillRect( 3, 2, 400 * getCurrentHp()/ getMaxHp(), 25);
+            pen.restore();
+
+            pen.save();
+            pen.setFill(Color.YELLOW);
+            pen.fillRect(0, 27, 106, 16);
+            if(shieldBroken) pen.setFill(Color.ORANGE);
+            else pen.setFill(Color.BLUE);
+            pen.fillRect(3, 29, 100 * currentShield/Const.MAX_SHIELD, 14);
             pen.restore();
         } else {
             pen.save();
             pen.setFill(Color.YELLOW);
-            pen.fillRect(GameScene.CANVAS_WIDTH-206, 0, 206, 27);
+            pen.fillRect(GameScene.CANVAS_WIDTH-406, 0, 406, 27);
             pen.setFill(Color.RED);
-            pen.fillRect(GameScene.CANVAS_WIDTH-2-200 * getCurrentHp()/ getMaxHp(),
-                    2, 200 * getCurrentHp()/ getMaxHp(), 25);
+            pen.fillRect(GameScene.CANVAS_WIDTH-3-400 * getCurrentHp()/ getMaxHp(),
+                    2, 400 * getCurrentHp()/ getMaxHp(), 25);
+
+            pen.save();
+            pen.setFill(Color.YELLOW);
+            pen.fillRect(GameScene.CANVAS_WIDTH-106, 27, 106, 16);
+            if(shieldBroken) pen.setFill(Color.ORANGE);
+            else pen.setFill(Color.BLUE);
+            pen.fillRect(GameScene.CANVAS_WIDTH-3-100 * currentShield/Const.MAX_SHIELD,
+                    29, 100 * currentShield/Const.MAX_SHIELD, 14);
+            pen.restore();
+        }
+
+        if(isDefended && this.currentShield > 0){
+            this.pumpkin.defend(this, this.currentShield);
+            this.pumpkin.paint();
         }
     }
 
@@ -182,6 +231,37 @@ public abstract class Plant extends Sprite{
     }
 
     public void takeDamage(int damage) {
-        this.currentHp -= damage;
+        if(this.isDefended && this.currentShield > 0)
+            this.currentShield -= damage;
+        else
+            this.currentHp -= damage;
+
+        if(this.currentShield <= 0) {
+            this.isDefended = false;
+            this.shieldBroken = true;
+        }
+    }
+
+    public void respawn(int x, int y){
+        this.currentHp = this.maxHp;
+        this.currentShield = Const.MAX_SHIELD;
+        this.setX(x);
+        this.setY(y);
+        this.setAlive(true);
+        this.jumped = true;
+    }
+
+    @Override
+    public void setGameScene(GameScene gameScene) {
+        super.setGameScene(gameScene);
+        this.pumpkin.setGameScene(gameScene);
+    }
+
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setFree(boolean free) {
+        isFree = free;
     }
 }

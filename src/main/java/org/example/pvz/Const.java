@@ -1,5 +1,7 @@
 package org.example.pvz;
 
+import javafx.geometry.Rectangle2D;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
@@ -32,4 +34,8 @@ public class Const {
     public static final int PEA_SPEED = Integer.parseInt(prop.getProperty("PEA_SPEED"));
     public static final int PEA_SHOOTER_ATTACK_COOLDOWN =
             Integer.parseInt(prop.getProperty("PEA_SHOOTER_ATTACK_COOLDOWN"));
+
+    public static final int MAX_SHIELD = Integer.parseInt(prop.getProperty("MAX_SHIELD"));
+
+    public static final Rectangle2D EMPTY_RECT = new Rectangle2D(0, 0, 0, 0);
 }

@@ -34,7 +34,7 @@ public class PeaShooter extends Plant {
 
     @Override
     public void attack() {
-        if(this.attackCooldown <= 0){
+        if(this.attackCooldown <= 0 && this.isFree()){
             this.attackCooldown = Const.PEA_SHOOTER_ATTACK_COOLDOWN;
             PeaBullet bullet;
             if(this.isToRight()){

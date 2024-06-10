@@ -36,7 +36,14 @@ public class PeaBullet extends Bullet {
             this.setX(this.getX()-Const.PEA_SPEED);
         if(this.getX()+this.getWidth() < 0) this.kill();
         if(this.getX() > GameScene.CANVAS_WIDTH) this.kill();
+
         super.update();
+
+        Plant other = getGameScene().getOtherPlant(getTeamTag());
+        if(other != null && other.getBounds().intersects(this.getBounds())){
+            other.takeDamage(Const.PEA_DAMAGE);
+            kill();
+        }
     }
 
     @Override

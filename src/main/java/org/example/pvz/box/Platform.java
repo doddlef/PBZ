@@ -1,6 +1,7 @@
-package org.example.pvz;
+package org.example.pvz.box;
 
 import javafx.scene.image.Image;
+import org.example.pvz.Const;
 import org.example.pvz.inter.Box;
 
 public class Platform extends Box {
