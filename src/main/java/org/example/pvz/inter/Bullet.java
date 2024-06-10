@@ -14,9 +14,6 @@ public class Bullet extends Sprite{
         this.teamTag = parent.getTeamTag();
     }
 
-    public void collide(Plant plant){
-    }
-
     public Plant getParent() {
         return parent;
     }
@@ -41,6 +38,17 @@ public class Bullet extends Sprite{
     public void update() {
         super.update();
         List<Box> collided = getGameScene().collideBox(this);
+        collideBox(collided);
+
+        Plant other = getGameScene().getOtherPlant(getTeamTag());
+        reactOther(other);
+    }
+
+    public void reactOther(Plant other){
+        if(other != null) kill();
+    }
+
+    public void collideBox(List<Box> collided){
         if(!collided.isEmpty()) {
             this.kill();
         }

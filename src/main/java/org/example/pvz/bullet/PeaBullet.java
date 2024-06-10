@@ -1,31 +1,31 @@
-package org.example.pvz;
+package org.example.pvz.bullet;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
+import org.example.pvz.Const;
+import org.example.pvz.inter.Box;
 import org.example.pvz.inter.Bullet;
 import org.example.pvz.inter.Plant;
+import org.example.pvz.stick.PeaExplode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PeaBullet extends Bullet {
     private static final List<List<Image>> animations = new ArrayList<>();
+    private static AudioClip explodeSound;
+
     static {
         animations.add(List.of(new Image(PeaBullet.class.
                 getResource("/org/example/images/pea/PeaNormal_0.png").toString(),
                 30, 30, false, true)));
+        explodeSound = new AudioClip(PeaBullet.class.
+                getResource("/org/example/sound/bulletExplode.mp3").toString());
     }
 
-    public PeaBullet(double x, double y, Plant parent, boolean toRight) {
+    public PeaBullet(double x, double y, Plant parent) {
         super(animations, x, y, 30, 30, parent);
-        setToRight(toRight);
-    }
-
-    @Override
-    public void collide(Plant plant) {
-        if(plant.getTeamTag() != this.getTeamTag()){
-            plant.takeDamage(Const.PEA_DAMAGE);
-            kill();
-        }
+        setToRight(parent.isToRight());
     }
 
     @Override
@@ -34,16 +34,29 @@ public class PeaBullet extends Bullet {
             this.setX(this.getX()+Const.PEA_SPEED);
         else
             this.setX(this.getX()-Const.PEA_SPEED);
-        if(this.getX()+this.getWidth() < 0) this.kill();
-        if(this.getX() > GameScene.CANVAS_WIDTH) this.kill();
 
         super.update();
+    }
 
-        Plant other = getGameScene().getOtherPlant(getTeamTag());
-        if(other != null && other.getBounds().intersects(this.getBounds())){
-            other.takeDamage(Const.PEA_DAMAGE);
+    @Override
+    public void collideBox(List<Box> collided) {
+        if(!collided.isEmpty()){
             kill();
+            addExplode();
         }
+    }
+
+    @Override
+    public void reactOther(Plant other) {
+        if(other != null && other.getBounds().intersects(this.getBounds())){
+            other.takeDamage(getDamage());
+            kill();
+            addExplode();
+        }
+    }
+
+    private void addExplode(){
+        getGameScene().addStatus(new PeaExplode(this.getX()-11, this.getY()-8));
     }
 
     @Override

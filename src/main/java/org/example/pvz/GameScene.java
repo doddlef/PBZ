@@ -12,6 +12,8 @@ import javafx.util.Duration;
 import org.example.pvz.box.CloudBox;
 import org.example.pvz.box.Platform;
 import org.example.pvz.inter.*;
+import org.example.pvz.plant.PeaShooter;
+import org.example.pvz.plant.Sunflower;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -33,6 +35,7 @@ public class GameScene {
     private PlantController controllerB;
     private List<Box> boxes = new LinkedList<>();
     private List<Bullet> bullets = new LinkedList<>();
+    private List<Status> statuses = new LinkedList<>();
 
     private Plant plantA = new PeaShooter(300, 40);
     private Plant plantB = new PeaShooter(600, 40);
@@ -50,15 +53,11 @@ public class GameScene {
 
         updater.setCycleCount(Animation.INDEFINITE);
 
-        plantA.setGameScene(this);
-        plantA.setTeamTag(1);
-        controllerA = LocalPlantController.getLocalPlayerOne();
-        controllerA.setPlant(plantA);
+        Plant plantA = new PeaShooter(300, 40);
+        Plant plantB = new Sunflower(600, 40);
 
-        plantB.setGameScene(this);
-        plantB.setTeamTag(2);
-        controllerB = LocalPlantController.getLocalPlayerTwo();
-        controllerB.setPlant(plantB);
+        setPlantA(plantA);
+        setPlantB(plantB);
 
         Box platform = new Platform(300, 375, 400, 20);
         addBox(platform);
@@ -79,8 +78,6 @@ public class GameScene {
         else whenPlantDead(plantA);
         if(plantB.isAlive()) plantB.update();
         else whenPlantDead(plantB);
-//        plantA.update();
-//        plantB.update();
 
         Iterator<Box> iterator = boxes.iterator();
         while(iterator.hasNext()){
@@ -103,6 +100,16 @@ public class GameScene {
             }
         }
 
+        Iterator<Status> iterator3 = statuses.iterator();
+        while(iterator3.hasNext()){
+            Status status = iterator3.next();
+            if(status.isAlive()){
+                status.update();
+            } else {
+                iterator3.remove();
+            }
+        }
+
         // paint
         pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -111,6 +118,7 @@ public class GameScene {
 
         boxes.forEach(Box::paint);
         bullets.forEach(Bullet::paint);
+        statuses.forEach(Status::paint);
     }
 
     private void keyProcess(KeyEvent event){
@@ -148,6 +156,25 @@ public class GameScene {
         return result;
     }
 
+    public void setPlantA(Plant plant){
+        this.plantA = plant;
+        plantA.setGameScene(this);
+        plantA.setTeamTag(1);
+        controllerA = LocalPlantController.getLocalPlayerOne();
+        controllerA.setPlant(plantA);
+
+        plantA.respawn(300, 40);
+    }
+
+    public void setPlantB(Plant plant){
+        this.plantB = plant;
+        plantB.setGameScene(this);
+        plantB.setTeamTag(2);
+        controllerB = LocalPlantController.getLocalPlayerTwo();
+        controllerB.setPlant(plantB);
+
+        plantB.respawn(600, 40);
+    }
 
     public void addBullet(Bullet bullet){
         bullet.setGameScene(this);
@@ -157,6 +184,11 @@ public class GameScene {
     public void addBox(Box box){
         box.setGameScene(this);
         boxes.add(box);
+    }
+
+    public void addStatus(Status status){
+        status.setGameScene(this);
+        statuses.add(status);
     }
 
     public Plant getOtherPlant(int teamTag){

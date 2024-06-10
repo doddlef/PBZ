@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.pvz.Const;
 import org.example.pvz.GameScene;
+import org.example.pvz.stick.Dizzy;
 import org.example.pvz.stick.Pumpkin;
 
 import java.util.List;
@@ -14,7 +15,6 @@ public abstract class Plant extends Sprite{
     private int teamTag = 0;
     private boolean onGround = false;
     private boolean jumped = false;
-    private boolean isFree = true;
     private double ySpeed = 0;
     private double xSpeed = 0;
 
@@ -23,6 +23,7 @@ public abstract class Plant extends Sprite{
     private int currentShield;
     private boolean isDefended = false;
     private boolean shieldBroken = false;
+    private int dizzy = 0;
 
     private Pumpkin pumpkin = new Pumpkin();
 
@@ -42,10 +43,10 @@ public abstract class Plant extends Sprite{
     }
 
     public void jump(){
-        if(!jumped && isFree){
+        if(!jumped && this.isFree()){
             jumped = true;
             offGround();
-            ySpeed = -Const.JUMP_SPEED;
+            ySpeed = -getJumpSpeed();
         }
     }
 
@@ -54,15 +55,15 @@ public abstract class Plant extends Sprite{
     }
 
     public void defend(){
-        if(this.currentShield > 0 && !this.shieldBroken){
+        if(this.currentShield > 0 && !this.shieldBroken && this.dizzy==0){
             this.isDefended = true;
-            this.isFree = false;
+//            this.isFree = false;
         }
     }
 
     public void defendRelease(){
         this.isDefended = false;
-        this.isFree = true;
+//        this.isFree = true;
     }
 
     public int getTeamTag() {
@@ -73,9 +74,9 @@ public abstract class Plant extends Sprite{
         this.teamTag = teamTag;
     }
 
-    public abstract void attack();
+    public void attack(){}
 
-    public abstract void attackRelease();
+    public void attackRelease(){}
 
     public void onGround(){
         onGround = true;
@@ -97,6 +98,7 @@ public abstract class Plant extends Sprite{
         if(this.getY() > GameScene.CANVAS_HEIGHT || this.currentHp <= 0) {
             this.kill();
         }
+        if(this.dizzy > 0) this.dizzy--;
     }
 
     @Override
@@ -112,24 +114,22 @@ public abstract class Plant extends Sprite{
         }
 
         // horizontal move
-        if(isFree){
-            if (left && !right) {
-                this.setToRight(false);
-                this.xSpeed -= Const.ACCELERATE_SPEED;
-            } else if (right && !left) {
-                this.setToRight(true);
-                this.xSpeed += Const.ACCELERATE_SPEED;
-            } else if (this.xSpeed > 0){
-                this.xSpeed -= Const.ACCELERATE_SPEED;
-                if(this.xSpeed < 0) this.xSpeed = 0;
-            } else {
-                this.xSpeed += Const.ACCELERATE_SPEED;
-                if(this.xSpeed > 0) this.xSpeed = 0;
-            }
-            if(this.xSpeed > Const.PLANT_SPEED) this.xSpeed = Const.PLANT_SPEED;
-            if(this.xSpeed < -Const.PLANT_SPEED) this.xSpeed = -Const.PLANT_SPEED;
-            setX(getX() + xSpeed);
+        if (left && !right && isFree()) {
+            this.setToRight(false);
+            this.xSpeed -= getPlatAccelerate();
+            if(this.xSpeed < -getPlantMaxSpeed()) this.xSpeed = -getPlantMaxSpeed();
+        } else if (right && !left && isFree()) {
+            this.setToRight(true);
+            this.xSpeed += getPlatAccelerate();
+            if(this.xSpeed > getPlantMaxSpeed()) this.xSpeed = getPlantMaxSpeed();
+        } else if (this.xSpeed > 0){
+            this.xSpeed -= getPlatAccelerate();
+            if(this.xSpeed < 0) this.xSpeed = 0;
+        } else {
+            this.xSpeed += getPlatAccelerate();
+            if(this.xSpeed > 0) this.xSpeed = 0;
         }
+        setX(getX() + xSpeed);
 
         // vertical move
         setY(getY() + ySpeed);
@@ -196,6 +196,23 @@ public abstract class Plant extends Sprite{
             this.pumpkin.defend(this, this.currentShield);
             this.pumpkin.paint();
         }
+
+        paintStatus();
+    }
+
+    public void paintStatus(){
+    }
+
+    public double getPlantMaxSpeed(){
+        return Const.PLANT_SPEED;
+    }
+
+    public double getPlatAccelerate(){
+        return Const.ACCELERATE_SPEED;
+    }
+
+    public double getJumpSpeed(){
+        return Const.JUMP_SPEED;
     }
 
     public void setYSpeed(double ySpeed) {
@@ -239,14 +256,21 @@ public abstract class Plant extends Sprite{
         if(this.currentShield <= 0) {
             this.isDefended = false;
             this.shieldBroken = true;
+            this.beDizzy(Const.SHIELD_BREAK_DIZZY);
         }
     }
 
     public void respawn(int x, int y){
+        if(this.teamTag == 1) this.setToRight(true);
+        else this.setToRight(false);
         this.currentHp = this.maxHp;
         this.currentShield = Const.MAX_SHIELD;
         this.setX(x);
         this.setY(y);
+        this.setXSpeed(0);
+        this.setYSpeed(0);
+        this.dizzy = 0;
+        this.shieldBroken = false;
         this.setAlive(true);
         this.jumped = true;
     }
@@ -258,10 +282,25 @@ public abstract class Plant extends Sprite{
     }
 
     public boolean isFree() {
-        return isFree;
+        return !isDefended && dizzy==0;
     }
 
-    public void setFree(boolean free) {
-        isFree = free;
+//    public void setFree(boolean free) {
+//        isFree = free;
+//    }
+
+    public void beDizzy(int time){
+        if(this.dizzy == 0 && time > 0)
+            getGameScene().addStatus(new Dizzy(this));
+        if(time > this.dizzy) this.dizzy = time;
+    }
+
+    public int getDizzy() {
+        return dizzy;
+    }
+
+    public void beKnockUp(double x, double y){
+        this.setXSpeed(x);
+        this.setYSpeed(y);
     }
 }
