@@ -49,8 +49,16 @@ public class Bullet extends Sprite{
     }
 
     public void collideBox(List<Box> collided){
-        if(!collided.isEmpty()) {
-            this.kill();
+        for(Box box : collided){
+            if(box.collide(this)){
+                collideFirstBox(box);
+                break;
+            }
         }
+    }
+
+    public void collideFirstBox(Box box){
+        box.takeDamage(this.getDamage());
+        this.kill();
     }
 }

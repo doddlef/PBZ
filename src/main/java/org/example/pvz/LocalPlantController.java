@@ -58,6 +58,10 @@ public class LocalPlantController implements PlantController {
                 plant.defend();
             } else if(key == attackKey){
                 plant.attack();
+            } else if(key == primaryKey){
+                plant.primaryPress();
+            } else if(key == ultimateKey){
+                plant.ultimatePress();
             }
         } else if(keyEvent.getEventType() == KeyEvent.KEY_RELEASED) {
             if(key == rightKey){
@@ -70,6 +74,8 @@ public class LocalPlantController implements PlantController {
                 plant.defendRelease();
             } else if(key == attackKey){
                 plant.attackRelease();
+            } else if(key == primaryKey){
+                plant.primaryRelease();
             }
         }
     }

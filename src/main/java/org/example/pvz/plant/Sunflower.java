@@ -1,7 +1,9 @@
 package org.example.pvz.plant;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import org.example.pvz.Const;
+import org.example.pvz.GameScene;
 import org.example.pvz.bullet.SunBullet;
 import org.example.pvz.inter.Bullet;
 import org.example.pvz.inter.Plant;
@@ -27,14 +29,18 @@ public class Sunflower extends Plant {
 
     private int readyAttack = 10;
     private boolean inReady = false;
+    private int recoverIndex = Const.SUNFLOWER_RECOVER_SPEED;
+
+    private double circleX, circleStep;
 
     public Sunflower(double x, double y) {
         super(animations, x, y, 70, 70, Const.SUNFLOWER_HP);
+        this.setPrimaryCooldown(Const.SUNFLOWER_PRIMARY_CD);
     }
 
     @Override
     public void attack() {
-        if(this.attackCooldown <= 0 && !this.inReady && this.ammoLeft > 0){
+        if(this.attackCooldown <= 0 && !this.inReady && this.ammoLeft > 0 && this.isFree()){
             this.readyAttack = 10;
             this.inReady = true;
         }
@@ -67,14 +73,34 @@ public class Sunflower extends Plant {
                 this.ammoIndex = Const.SUNFLOWER_AMMO_SPEED;
             }
         }
-    }
-
-    @Override
-    public void update() {
-        super.update();
         if(this.inReady) {
             readyAttack++;
         }
+        if(this.getCurrentHp() < this.getMaxHp()){
+            this.recoverIndex--;
+            if(this.recoverIndex == 0){
+                this.setCurrentHp(this.getCurrentHp()+Const.SUNFLOWER_HP_RECOVER);
+                this.recoverIndex = Const.SUNFLOWER_RECOVER_SPEED;
+            }
+        }
+    }
+
+    @Override
+    public void paintStatus() {
+        super.paintStatus();
+        for(int i = 0; i < ammoLeft; i++){
+            getGameScene().getGraphicsContext().save();
+            getGameScene().getGraphicsContext().setFill(Color.ORANGE);
+            getGameScene().getGraphicsContext().fillRect(circleX+i*circleStep, 60, 30, 30);
+            getGameScene().getGraphicsContext().restore();
+        }
+    }
+
+    @Override
+    public void primary() {
+        Plant other = getGameScene().getOtherPlant(getTeamTag());
+        SunBullet bullet = new SunBullet(other.getX(), -35, this, 0, Const.GRAVITY/3);
+        getGameScene().addBullet(bullet);
     }
 
     @Override
@@ -94,6 +120,13 @@ public class Sunflower extends Plant {
     @Override
     public void setTeamTag(int teamTag) {
         super.setTeamTag(teamTag);
+        if(this.getTeamTag() == 1){
+            circleX = 20;
+            circleStep = 40;
+        } else {
+            circleX = GameScene.CANVAS_WIDTH - 50;
+            circleStep = -40;
+        }
     }
 
     @Override
@@ -118,7 +151,7 @@ public class Sunflower extends Plant {
 
     @Override
     public double getJumpSpeed() {
-        if(inReady) return Const.JUMP_SPEED/2;
+        if(inReady) return Const.JUMP_SPEED/1.5;
         return Const.JUMP_SPEED;
     }
 }

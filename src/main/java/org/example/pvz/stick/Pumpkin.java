@@ -45,9 +45,9 @@ public class Pumpkin extends Sprite {
     public void defend(Plant plant, int status){
         this.setX(plant.getX()+plant.getWidth()/2-48);
         this.setY(plant.getY()+plant.getHeight()-67);
-        if(status > 20){
+        if(status > 15){
             this.setAnimationIndex(0);
-        } else if(status > 10)
+        } else if(status > 5)
             this.setAnimationIndex(1);
         else
             this.setAnimationIndex(2);

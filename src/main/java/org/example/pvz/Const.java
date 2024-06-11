@@ -1,7 +1,6 @@
 package org.example.pvz;
 
 import javafx.geometry.Rectangle2D;
-import org.example.pvz.stick.Pumpkin;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -40,6 +39,8 @@ public class Const {
     public static final int PEA_COMBO_TIME = Integer.parseInt(prop.getProperty("PEA_COMBO_TIME"));
     public static final int FIRE_PEA_DIZZY = Integer.parseInt(prop.getProperty("FIRE_PEA_DIZZY"));
     public static final double FIRE_PEA_KNOCK = Double.parseDouble(prop.getProperty("FIRE_PEA_KNOCK"));
+    public static final int PEA_PRIMARY_CD = Integer.parseInt(prop.getProperty("PEA_PRIMARY_CD"));
+    public static final int PEA_ULTIMATE_TIME = Integer.parseInt(prop.getProperty("PEA_ULTIMATE_TIME"));
 
     public static final int MAX_SHIELD = Integer.parseInt(prop.getProperty("MAX_SHIELD"));
     public static final int SHIELD_BREAK_DIZZY = Integer.parseInt(prop.getProperty("SHIELD_BREAK_DIZZY"));
@@ -50,8 +51,17 @@ public class Const {
     public static final int SUNFLOWER_HP_RECOVER = Integer.parseInt(prop.getProperty("SUNFLOWER_HP_RECOVER"));
     public static final int SUNFLOWER_ATTACK_COOLDOWN= Integer.parseInt(prop.getProperty("SUNFLOWER_ATTACK_COOLDOWN"));
     public static final int SUNFLOWER_MAX_READY = Integer.parseInt(prop.getProperty("SUNFLOWER_MAX_READY"));
+    public static final int SUNFLOWER_RECOVER_SPEED = Integer.parseInt(prop.getProperty("SUNFLOWER_RECOVER_SPEED"));
+    public static final int SUNFLOWER_PRIMARY_CD = Integer.parseInt(prop.getProperty("SUNFLOWER_PRIMARY_CD"));
 
     public static final int SUN_COUNT_DOWN = Integer.parseInt(prop.getProperty("SUN_COUNT_DOWN"));
+    public static final int SUN_DAMAGE = Integer.parseInt(prop.getProperty("SUN_DAMAGE"));
+    public static final int SUN_KNOCK = Integer.parseInt(prop.getProperty("SUN_KNOCK"));
+    public static final int SUN_DIZZY = Integer.parseInt(prop.getProperty("SUN_DIZZY"));
+    public static final double SUNFLOWER_PRIMARY_SPEED = Double.parseDouble(prop.getProperty("SUNFLOWER_PRIMARY_SPEED"));
+
+    public static final int TORCH_WOOD_HP = Integer.parseInt(prop.getProperty("TORCH_WOOD_HP"));
+    public static final int TORCH_LIFE_INDEX = Integer.parseInt(prop.getProperty("TORCH_LIFE_INDEX"));
 
     public static final Rectangle2D EMPTY_RECT = new Rectangle2D(0, 0, 0, 0);
 }

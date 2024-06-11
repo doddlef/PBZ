@@ -2,7 +2,6 @@ package org.example.pvz.bullet;
 
 import javafx.scene.image.Image;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
 import org.example.pvz.inter.Bullet;
 import org.example.pvz.inter.Plant;
 
@@ -29,7 +28,10 @@ public class FirePea extends Bullet {
     @Override
     public void reactOther(Plant other) {
         if(other != null && other.getBounds().intersects(this.getBounds())){
-            other.takeDamage(getDamage());
+            getParent().makeDamage(other, Const.PEA_DAMAGE*2);
+            other.beDizzy(Const.FIRE_PEA_DIZZY);
+            if(isToRight()) other.beKnockUp(Const.FIRE_PEA_KNOCK, 0);
+            else other.beKnockUp(-Const.FIRE_PEA_KNOCK, 0);
             kill();
         }
     }
@@ -47,14 +49,5 @@ public class FirePea extends Bullet {
             this.setX(this.getX()-Const.PEA_SPEED*1.2);
 
         super.update();
-
-        Plant other = getGameScene().getOtherPlant(getTeamTag());
-        if(other != null && other.getBounds().intersects(this.getBounds())){
-            other.takeDamage(Const.PEA_DAMAGE);
-            other.beDizzy(Const.FIRE_PEA_DIZZY);
-            if(isToRight()) other.beKnockUp(Const.FIRE_PEA_KNOCK, 0);
-            else other.beKnockUp(-Const.FIRE_PEA_KNOCK, 0);
-            kill();
-        }
     }
 }

@@ -3,6 +3,7 @@ package org.example.pvz;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -15,6 +16,7 @@ import org.example.pvz.inter.*;
 import org.example.pvz.plant.PeaShooter;
 import org.example.pvz.plant.Sunflower;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,12 +32,16 @@ public class GameScene {
             event -> update()));
     private boolean running = false;
     private GameDirector gameDirector;
+//    private MediaPlayer mediaPlayer = new MediaPlayer();
 
     private PlantController controllerA;
     private PlantController controllerB;
     private List<Box> boxes = new LinkedList<>();
     private List<Bullet> bullets = new LinkedList<>();
     private List<Status> statuses = new LinkedList<>();
+    private List<Box> boxesCache = new ArrayList<>(16);
+    private List<Bullet> bulletsCache = new ArrayList<>(16);
+    private List<Status> statusesCache = new ArrayList<>(16);
 
     private Plant plantA = new PeaShooter(300, 40);
     private Plant plantB = new PeaShooter(600, 40);
@@ -54,7 +60,7 @@ public class GameScene {
         updater.setCycleCount(Animation.INDEFINITE);
 
         Plant plantA = new PeaShooter(300, 40);
-        Plant plantB = new Sunflower(600, 40);
+        Plant plantB = new PeaShooter(600, 40);
 
         setPlantA(plantA);
         setPlantB(plantB);
@@ -79,6 +85,10 @@ public class GameScene {
         if(plantB.isAlive()) plantB.update();
         else whenPlantDead(plantB);
 
+        if(!boxesCache.isEmpty()) {
+            boxes.addAll(boxesCache);
+            boxesCache.clear();
+        }
         Iterator<Box> iterator = boxes.iterator();
         while(iterator.hasNext()){
             Box box = iterator.next();
@@ -89,6 +99,10 @@ public class GameScene {
             }
         }
 
+        if(!bulletsCache.isEmpty()) {
+            bullets.addAll(bulletsCache);
+            bulletsCache.clear();
+        }
         Iterator<Bullet> iterator2 = bullets.iterator();
         while(iterator2.hasNext()){
             Bullet bullet = iterator2.next();
@@ -100,6 +114,10 @@ public class GameScene {
             }
         }
 
+        if(!statusesCache.isEmpty()) {
+            statuses.addAll(statusesCache);
+            statusesCache.clear();
+        }
         Iterator<Status> iterator3 = statuses.iterator();
         while(iterator3.hasNext()){
             Status status = iterator3.next();
@@ -156,6 +174,16 @@ public class GameScene {
         return result;
     }
 
+    public List<Box> collideBox(Rectangle2D rect){
+        List<Box> result = new LinkedList<>();
+        for(Box box : boxes){
+            if(box.getBounds().intersects(rect)){
+                result.add(box);
+            }
+        }
+        return result;
+    }
+
     public void setPlantA(Plant plant){
         this.plantA = plant;
         plantA.setGameScene(this);
@@ -178,17 +206,17 @@ public class GameScene {
 
     public void addBullet(Bullet bullet){
         bullet.setGameScene(this);
-        bullets.add(bullet);
+        bulletsCache.add(bullet);
     }
 
     public void addBox(Box box){
         box.setGameScene(this);
-        boxes.add(box);
+        boxesCache.add(box);
     }
 
     public void addStatus(Status status){
         status.setGameScene(this);
-        statuses.add(status);
+        statusesCache.add(status);
     }
 
     public Plant getOtherPlant(int teamTag){
@@ -208,4 +236,8 @@ public class GameScene {
             addBox(cloud);
         }
     }
+
+//    public MediaPlayer getMediaPlayer() {
+//        return mediaPlayer;
+//    }
 }

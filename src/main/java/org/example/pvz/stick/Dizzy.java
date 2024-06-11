@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Dizzy extends Status {
-    private static final List<List<javafx.scene.image.Image>> animations = new ArrayList<>();
+    private static final List<List<Image>> animations = new ArrayList<>();
 
     static {
         List<Image> frames = new ArrayList<>(2);

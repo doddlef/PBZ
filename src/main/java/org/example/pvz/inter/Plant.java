@@ -25,6 +25,11 @@ public abstract class Plant extends Sprite{
     private boolean shieldBroken = false;
     private int dizzy = 0;
 
+    private int primaryCooldown = 0;
+    private int primaryCountDown = 0;
+    private int ultimateEnergy = 0;
+    private int currentEnergy = 0;
+
     private Pumpkin pumpkin = new Pumpkin();
 
     public Plant(List<List<Image>> animations, double x, double y, double width, double height, int maxHp) {
@@ -57,14 +62,32 @@ public abstract class Plant extends Sprite{
     public void defend(){
         if(this.currentShield > 0 && !this.shieldBroken && this.dizzy==0){
             this.isDefended = true;
-//            this.isFree = false;
         }
     }
 
     public void defendRelease(){
         this.isDefended = false;
-//        this.isFree = true;
     }
+
+    public void primaryPress(){
+        if(primaryCountDown == 0){
+            primaryCountDown = primaryCooldown;
+            primary();
+        }
+    }
+
+    public void primaryRelease(){}
+
+    public void ultimatePress(){
+        if(currentEnergy >= ultimateEnergy){
+            currentEnergy = 0;
+            ultimate();
+        }
+    }
+
+    public void ultimate(){}
+
+    public void primary(){}
 
     public int getTeamTag() {
         return teamTag;
@@ -99,6 +122,7 @@ public abstract class Plant extends Sprite{
             this.kill();
         }
         if(this.dizzy > 0) this.dizzy--;
+        if(this.primaryCountDown >0) this.primaryCountDown--;
     }
 
     @Override
@@ -165,14 +189,13 @@ public abstract class Plant extends Sprite{
             pen.fillRect(0, 0, 406, 27);
             pen.setFill(Color.RED);
             pen.fillRect( 3, 2, 400 * getCurrentHp()/ getMaxHp(), 25);
-            pen.restore();
 
-            pen.save();
             pen.setFill(Color.YELLOW);
             pen.fillRect(0, 27, 106, 16);
             if(shieldBroken) pen.setFill(Color.ORANGE);
             else pen.setFill(Color.BLUE);
             pen.fillRect(3, 29, 100 * currentShield/Const.MAX_SHIELD, 14);
+
             pen.restore();
         } else {
             pen.save();
@@ -182,7 +205,6 @@ public abstract class Plant extends Sprite{
             pen.fillRect(GameScene.CANVAS_WIDTH-3-400 * getCurrentHp()/ getMaxHp(),
                     2, 400 * getCurrentHp()/ getMaxHp(), 25);
 
-            pen.save();
             pen.setFill(Color.YELLOW);
             pen.fillRect(GameScene.CANVAS_WIDTH-106, 27, 106, 16);
             if(shieldBroken) pen.setFill(Color.ORANGE);
@@ -256,8 +278,14 @@ public abstract class Plant extends Sprite{
         if(this.currentShield <= 0) {
             this.isDefended = false;
             this.shieldBroken = true;
-            this.beDizzy(Const.SHIELD_BREAK_DIZZY);
+//            this.beDizzy(Const.SHIELD_BREAK_DIZZY);
         }
+        this.currentEnergy += damage;
+    }
+
+    public void makeDamage(Plant other, int damage) {
+        other.takeDamage(damage);
+        this.currentEnergy += damage;
     }
 
     public void respawn(int x, int y){
@@ -273,6 +301,7 @@ public abstract class Plant extends Sprite{
         this.shieldBroken = false;
         this.setAlive(true);
         this.jumped = true;
+        this.primaryCountDown = 0;
     }
 
     @Override
@@ -290,6 +319,7 @@ public abstract class Plant extends Sprite{
 //    }
 
     public void beDizzy(int time){
+        if(this.isDefended) return;
         if(this.dizzy == 0 && time > 0)
             getGameScene().addStatus(new Dizzy(this));
         if(time > this.dizzy) this.dizzy = time;
@@ -300,7 +330,41 @@ public abstract class Plant extends Sprite{
     }
 
     public void beKnockUp(double x, double y){
+        if(this.isDefended) return;
         this.setXSpeed(x);
         this.setYSpeed(y);
+    }
+
+    public int getPrimaryCountDown() {
+        return primaryCountDown;
+    }
+
+    public void setPrimaryCountDown(int primaryCountDown) {
+        this.primaryCountDown = primaryCountDown;
+    }
+
+    public int getPrimaryCooldown() {
+        return primaryCooldown;
+    }
+
+    public void setPrimaryCooldown(int primaryCooldown) {
+        this.primaryCooldown = primaryCooldown;
+        this.primaryCountDown = 0;
+    }
+
+    public int getUltimateEnergy() {
+        return ultimateEnergy;
+    }
+
+    public void setUltimateEnergy(int ultimateEnergy) {
+        this.ultimateEnergy = ultimateEnergy;
+    }
+
+    public int getCurrentEnergy() {
+        return currentEnergy;
+    }
+
+    public void setCurrentEnergy(int currentEnergy) {
+        this.currentEnergy = currentEnergy;
     }
 }

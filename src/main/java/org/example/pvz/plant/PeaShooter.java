@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.pvz.Const;
 import org.example.pvz.GameScene;
+import org.example.pvz.box.TorchWood;
 import org.example.pvz.bullet.FirePea;
 import org.example.pvz.bullet.PeaBullet;
 import org.example.pvz.inter.Bullet;
@@ -18,9 +19,12 @@ public class PeaShooter extends Plant {
 
     private int attackCooldown = 0;
     private int ammoLeft = Const.PEA_SHOOTER_AMMO;
-    private int ammoIndex = Const.PEA_SHOOTER_AMMO_SPEED;
+    private int ammoIndexMax = Const.PEA_SHOOTER_AMMO_SPEED;
+    private int ammoIndex = ammoIndexMax;
     private int combo = 0;
     private int comboTime = 0;
+
+    private int ultimateLeft = 0;
 
     private double circleX, circleStep;
 
@@ -31,10 +35,19 @@ public class PeaShooter extends Plant {
                     getResource("/org/example/images/peashooter/Peashooter_"+i+".png").toString()));
         }
         animations.add(frames);
+        frames = new ArrayList<>(15);
+        for(int i = 0; i < 15; i++){
+            frames.add(new Image(PeaShooter.class.
+                    getResource("/org/example/images/RepeaterPea/RepeaterPea_"+i+".png").toString()));
+        }
+        animations.add(frames);
     }
 
     public PeaShooter(double x, double y) {
         super(animations, x, y, WIDTH, HEIGHT, Const.PEA_SHOOTER_HP);
+        this.setPrimaryCooldown(Const.PEA_PRIMARY_CD);
+        this.setUltimateEnergy(Const.PEA_ULTIMATE_TIME);
+        this.setCurrentEnergy(0);
     }
 
     @Override
@@ -43,13 +56,41 @@ public class PeaShooter extends Plant {
         if(this.attackCooldown > 0) this.attackCooldown--;
         if(this.ammoLeft < Const.PEA_SHOOTER_AMMO) {
             this.ammoIndex--;
-            if(this.ammoIndex == 0) {
+            if(this.ammoIndex <= 0) {
                 this.ammoLeft++;
-                this.ammoIndex = Const.PEA_SHOOTER_AMMO_SPEED;
+                this.ammoIndex = this.ammoIndexMax;
             }
         }
         if(this.comboTime == 0) this.combo = 0;
         else this.comboTime--;
+
+        if(ultimateLeft > 0) {
+            this.ultimateLeft--;
+            if(ultimateLeft == 0) endUltimate();
+        }
+    }
+
+    @Override
+    public void primary() {
+        TorchWood torchWood;
+        if(isToRight())
+            torchWood = new TorchWood(getX()+getWidth(), getY()-10, this);
+        else
+            torchWood = new TorchWood(getX()-73, getY()-10, this);
+        getGameScene().addBox(torchWood);
+    }
+
+    @Override
+    public void ultimate() {
+        this.ultimateLeft = Const.PEA_ULTIMATE_TIME;
+        this.ammoIndexMax = Const.PEA_SHOOTER_AMMO_SPEED/3;
+        this.setAnimationIndex(1);
+    }
+
+    private void endUltimate(){
+        this.setAnimationIndex(0);
+        this.ammoIndexMax = Const.PEA_SHOOTER_AMMO_SPEED;
+        this.ultimateLeft = 0;
     }
 
     @Override
@@ -83,14 +124,10 @@ public class PeaShooter extends Plant {
     }
 
     @Override
-    public void attackRelease() {
-
-    }
-
-    @Override
     public void respawn(int x, int y) {
         super.respawn(x, y);
         this.ammoLeft = Const.PEA_SHOOTER_AMMO;
+        endUltimate();
     }
 
     @Override
@@ -103,5 +140,11 @@ public class PeaShooter extends Plant {
             circleX = GameScene.CANVAS_WIDTH - 30;
             circleStep = -30;
         }
+    }
+
+    @Override
+    public void makeDamage(Plant other, int damage) {
+        other.takeDamage(damage);
+        if(this.ultimateLeft <= 0) setCurrentEnergy(getCurrentEnergy()+damage);
     }
 }

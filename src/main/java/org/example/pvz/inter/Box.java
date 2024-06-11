@@ -35,7 +35,9 @@ public class Box extends Sprite{
         }
     }
 
-    public void collide(Bullet bullet){
-        bullet.kill();
+    public boolean collide(Bullet bullet){
+        return true;
     }
+
+    public void takeDamage(int damage){}
 }
