@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.pvz.Const;
 import org.example.pvz.GameScene;
+import org.example.pvz.bullet.Jalapeno;
 import org.example.pvz.bullet.SunBullet;
 import org.example.pvz.inter.Bullet;
 import org.example.pvz.inter.Plant;
@@ -36,6 +37,7 @@ public class Sunflower extends Plant {
     public Sunflower(double x, double y) {
         super(animations, x, y, 70, 70, Const.SUNFLOWER_HP);
         this.setPrimaryCooldown(Const.SUNFLOWER_PRIMARY_CD);
+        this.setUltimateEnergy(Const.SUNFLOWER_ULTIMATE_ENERGY);
     }
 
     @Override
@@ -91,7 +93,7 @@ public class Sunflower extends Plant {
         for(int i = 0; i < ammoLeft; i++){
             getGameScene().getGraphicsContext().save();
             getGameScene().getGraphicsContext().setFill(Color.ORANGE);
-            getGameScene().getGraphicsContext().fillRect(circleX+i*circleStep, 60, 30, 30);
+            getGameScene().getGraphicsContext().fillRect(circleX+i*circleStep, 55, 30, 30);
             getGameScene().getGraphicsContext().restore();
         }
     }
@@ -100,6 +102,12 @@ public class Sunflower extends Plant {
     public void primary() {
         Plant other = getGameScene().getOtherPlant(getTeamTag());
         SunBullet bullet = new SunBullet(other.getX(), -35, this, 0, Const.GRAVITY/3);
+        getGameScene().addBullet(bullet);
+    }
+
+    @Override
+    public void ultimate() {
+        Bullet bullet = new Jalapeno(this.getX(), this.getY()-40, this);
         getGameScene().addBullet(bullet);
     }
 

@@ -15,6 +15,7 @@ import org.example.pvz.box.Platform;
 import org.example.pvz.inter.*;
 import org.example.pvz.plant.PeaShooter;
 import org.example.pvz.plant.Sunflower;
+import org.example.pvz.stick.PlantFood;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,6 +44,7 @@ public class GameScene {
     private List<Bullet> bulletsCache = new ArrayList<>(16);
     private List<Status> statusesCache = new ArrayList<>(16);
 
+    private GameObject background = new Background(this);
     private Plant plantA = new PeaShooter(300, 40);
     private Plant plantB = new PeaShooter(600, 40);
 
@@ -60,7 +62,7 @@ public class GameScene {
         updater.setCycleCount(Animation.INDEFINITE);
 
         Plant plantA = new PeaShooter(300, 40);
-        Plant plantB = new PeaShooter(600, 40);
+        Plant plantB = new Sunflower(600, 40);
 
         setPlantA(plantA);
         setPlantB(plantB);
@@ -129,7 +131,8 @@ public class GameScene {
         }
 
         // paint
-        pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+//        pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        background.paint();
 
         plantA.paint();
         plantB.paint();
@@ -191,6 +194,9 @@ public class GameScene {
         controllerA = LocalPlantController.getLocalPlayerOne();
         controllerA.setPlant(plantA);
 
+        Status plantFood = PlantFood.create(plant);
+        addStatus(plantFood);
+
         plantA.respawn(300, 40);
     }
 
@@ -200,6 +206,9 @@ public class GameScene {
         plantB.setTeamTag(2);
         controllerB = LocalPlantController.getLocalPlayerTwo();
         controllerB.setPlant(plantB);
+
+        Status plantFood = PlantFood.create(plant);
+        addStatus(plantFood);
 
         plantB.respawn(600, 40);
     }

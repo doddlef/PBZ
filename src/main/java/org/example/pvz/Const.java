@@ -53,12 +53,17 @@ public class Const {
     public static final int SUNFLOWER_MAX_READY = Integer.parseInt(prop.getProperty("SUNFLOWER_MAX_READY"));
     public static final int SUNFLOWER_RECOVER_SPEED = Integer.parseInt(prop.getProperty("SUNFLOWER_RECOVER_SPEED"));
     public static final int SUNFLOWER_PRIMARY_CD = Integer.parseInt(prop.getProperty("SUNFLOWER_PRIMARY_CD"));
+    public static final int SUNFLOWER_ULTIMATE_ENERGY = Integer.parseInt(prop.getProperty("SUNFLOWER_ULTIMATE_ENERGY"));
 
     public static final int SUN_COUNT_DOWN = Integer.parseInt(prop.getProperty("SUN_COUNT_DOWN"));
     public static final int SUN_DAMAGE = Integer.parseInt(prop.getProperty("SUN_DAMAGE"));
     public static final int SUN_KNOCK = Integer.parseInt(prop.getProperty("SUN_KNOCK"));
     public static final int SUN_DIZZY = Integer.parseInt(prop.getProperty("SUN_DIZZY"));
-    public static final double SUNFLOWER_PRIMARY_SPEED = Double.parseDouble(prop.getProperty("SUNFLOWER_PRIMARY_SPEED"));
+
+    public static final int JALAPENO_LIFE = Integer.parseInt(prop.getProperty("JALAPENO_LIFE"));
+    public static final int JALAPENO_DAMAGE = Integer.parseInt(prop.getProperty("JALAPENO_DAMAGE"));
+    public static final int JALAPENO_DIZZY = Integer.parseInt(prop.getProperty("JALAPENO_DIZZY"));
+    public static final double JALAPENO_SPEED = Double.parseDouble(prop.getProperty("JALAPENO_SPEED"));
 
     public static final int TORCH_WOOD_HP = Integer.parseInt(prop.getProperty("TORCH_WOOD_HP"));
     public static final int TORCH_LIFE_INDEX = Integer.parseInt(prop.getProperty("TORCH_LIFE_INDEX"));

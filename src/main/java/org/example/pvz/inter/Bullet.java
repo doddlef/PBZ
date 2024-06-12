@@ -44,9 +44,7 @@ public class Bullet extends Sprite{
         reactOther(other);
     }
 
-    public void reactOther(Plant other){
-        if(other != null) kill();
-    }
+    public void reactOther(Plant other){}
 
     public void collideBox(List<Box> collided){
         for(Box box : collided){

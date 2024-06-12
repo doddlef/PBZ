@@ -26,8 +26,8 @@ public class SunBullet extends Bullet {
 
     private double acceleration;
     private double xSpeed, ySpeed;
-    protected int countDown = Const.SUN_COUNT_DOWN;
-    protected boolean fixed = false;
+    private int countDown = Const.SUN_COUNT_DOWN;
+    private boolean fixed = false;
 
     public SunBullet(double x, double y, Plant parent, double xSpeed, double acceleration) {
         super(animations, x, y, 70, 70, parent);
@@ -72,7 +72,7 @@ public class SunBullet extends Bullet {
         }
     }
 
-    protected void explode(){
+    private void explode(){
         Status explode = new Explode(this.getX()-15, this.getY()-30);
         getGameScene().addStatus(explode);
 

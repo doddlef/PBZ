@@ -285,7 +285,7 @@ public abstract class Plant extends Sprite{
 
     public void makeDamage(Plant other, int damage) {
         other.takeDamage(damage);
-        this.currentEnergy += damage;
+        this.currentEnergy += 2*damage;
     }
 
     public void respawn(int x, int y){
