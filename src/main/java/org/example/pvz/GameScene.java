@@ -224,10 +224,10 @@ public class GameScene {
         statusesCache.add(status);
     }
 
-    public Plant getOtherPlant(int teamTag){
-        if(teamTag == 1) return plantB;
-        else if(teamTag == 2) return plantA;
-        return null;
+    public List<Plant> getOtherPlant(int teamTag){
+        if(teamTag == 1) return List.of(plantB);
+        else if(teamTag == 2) return List.of(plantA);
+        return List.of(plantA, plantB);
     }
 
     public List<Plant> getAllPlant(){

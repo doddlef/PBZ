@@ -24,10 +24,12 @@ public class RoofTop implements GameMap {
 
     private int direction = 0;
     private int windCountDown = Const.ROOF_TOP_WIND_CD;
+    private int giftCountDown = Const.ROOF_TOP_BOX_CD;
 
     @Override
     public void update() {
         windCountDown--;
+        giftCountDown--;
         if (windCountDown == 0) {
             if(direction == 0){
                 direction = random[rand.nextInt(random.length)];
@@ -40,9 +42,13 @@ public class RoofTop implements GameMap {
                 }
                 windCountDown = Const.ROOF_TOP_WIND_CD;
                 direction = 0;
-                Box gift = new GiftBox(200, 50, 200, g->System.out.println("hello"), 200);
-                getGameScene().addBox(gift);
             }
+        }
+        if(giftCountDown == 0){
+            GiftBox giftBox = GiftBox.doomShroomBox(rand.nextDouble(100, 860),
+                    -50, 100, 200);
+            getGameScene().addBox(giftBox);
+            giftCountDown = Const.ROOF_TOP_BOX_CD;
         }
     }
 

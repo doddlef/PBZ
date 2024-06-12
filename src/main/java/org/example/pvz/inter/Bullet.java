@@ -40,8 +40,7 @@ public class Bullet extends Sprite{
         List<Box> collided = getGameScene().collideBox(this);
         collideBox(collided);
 
-        Plant other = getGameScene().getOtherPlant(getTeamTag());
-        reactOther(other);
+        getGameScene().getOtherPlant(getTeamTag()).forEach(this::reactOther);
     }
 
     public void reactOther(Plant other){}

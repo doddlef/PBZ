@@ -51,8 +51,6 @@ public class Jalapeno extends Bullet {
         super.update();
     }
 
-
-
     @Override
     public void collideFirstBox(Box box) {
         this.xSpeed = 0;
@@ -64,22 +62,24 @@ public class Jalapeno extends Bullet {
         Status explode = new JalapenoExplode(this.getX()-343, this.getY()-44);
         Status boom = new ShroomBoom(this.getX()-107, this.getY()-235);
 
-        Plant other = getGameScene().getOtherPlant(getTeamTag());
+        List<Plant> others = getGameScene().getOtherPlant(getTeamTag());
 
-        if(other.getY() < getY()+getHeight()){
-            double distance = Math.abs(this.getX()+this.getWidth()/2-other.getX()-other.getWidth()/2);
+        for(Plant other : others){
+            if(other.getY() < getY()+getHeight()){
+                double distance = Math.abs(this.getX()+this.getWidth()/2-other.getX()-other.getWidth()/2);
 
-            int damage = (int) (Const.JALAPENO_DAMAGE * (400-distance)/400 + 10);
-            if(damage < 10) damage = 10;
+                int damage = (int) (Const.JALAPENO_DAMAGE * (400-distance)/400 + 10);
+                if(damage < 10) damage = 10;
 
-            int dizzy = (int) (Const.JALAPENO_DIZZY * (400-distance)/400 + 10);
-            if(dizzy < 10) dizzy = 10;
+                int dizzy = (int) (Const.JALAPENO_DIZZY * (400-distance)/400 + 10);
+                if(dizzy < 10) dizzy = 10;
 
-            other.takeDamage(damage);
-            other.beDizzy(dizzy);
-        } else {
-            other.takeDamage(10);
-            other.beDizzy(10);
+                other.takeDamage(damage);
+                other.beDizzy(dizzy);
+            } else {
+                other.takeDamage(10);
+                other.beDizzy(10);
+            }
         }
 
         getGameScene().addStatus(explode);

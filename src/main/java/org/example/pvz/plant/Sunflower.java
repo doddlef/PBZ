@@ -100,7 +100,7 @@ public class Sunflower extends Plant {
 
     @Override
     public void primary() {
-        Plant other = getGameScene().getOtherPlant(getTeamTag());
+        Plant other = getGameScene().getOtherPlant(getTeamTag()).getFirst();
         SunBullet bullet = new SunBullet(other.getX(), -35, this, 0, Const.GRAVITY/3);
         getGameScene().addBullet(bullet);
     }

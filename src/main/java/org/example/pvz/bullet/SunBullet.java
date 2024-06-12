@@ -76,25 +76,26 @@ public class SunBullet extends Bullet {
         Status explode = new Explode(this.getX()-15, this.getY()-30);
         getGameScene().addStatus(explode);
 
-        Plant other = getGameScene().getOtherPlant(getTeamTag());
-        Rectangle2D bounds = new Rectangle2D(
-                this.getX()-15, this.getY()-15, 100, 100
-        );
-        if(bounds.intersects(other.getBounds())){
-            double xDistance =
-                    this.getX()+this.getWidth()/2-other.getX()-other.getWidth()/2;
-            if(!fixed) {
-                getParent().makeDamage(other, Const.SUN_DAMAGE);
-                other.beDizzy(Const.SUN_DIZZY);
-                other.beKnockUp(Const.SUN_KNOCK*(xDistance>0?-1:1),
-                        -Const.SUN_KNOCK);
-            } else {
-                getParent().makeDamage(other, Const.SUN_DAMAGE/2);
-                other.beDizzy(Const.SUN_DIZZY/2 );
-                other.beKnockUp(Const.SUN_KNOCK*(xDistance>0?-1:1)/2,
-                        -Const.SUN_KNOCK/3);
+        getGameScene().getOtherPlant(getTeamTag()).forEach(other -> {
+            Rectangle2D bounds = new Rectangle2D(
+                    this.getX()-15, this.getY()-15, 100, 100
+            );
+            if(bounds.intersects(other.getBounds())){
+                double xDistance =
+                        this.getX()+this.getWidth()/2-other.getX()-other.getWidth()/2;
+                if(!fixed) {
+                    getParent().makeDamage(other, Const.SUN_DAMAGE);
+                    other.beDizzy(Const.SUN_DIZZY);
+                    other.beKnockUp(Const.SUN_KNOCK*(xDistance>0?-1:1),
+                            -Const.SUN_KNOCK);
+                } else {
+                    getParent().makeDamage(other, Const.SUN_DAMAGE/2);
+                    other.beDizzy(Const.SUN_DIZZY/2 );
+                    other.beKnockUp(Const.SUN_KNOCK*(xDistance>0?-1:1)/2,
+                            -Const.SUN_KNOCK/3);
+                }
             }
-        }
+        });
 
         List<Box> boxes = getGameScene().collideBox(getBounds());
         for(Box box : boxes){

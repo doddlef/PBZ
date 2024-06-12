@@ -145,6 +145,6 @@ public class PeaShooter extends Plant {
     @Override
     public void makeDamage(Plant other, int damage) {
         other.takeDamage(damage);
-        if(this.ultimateLeft <= 0) setCurrentEnergy(getCurrentEnergy()+2*damage);
+        if(this.ultimateLeft <= 0) setCurrentEnergy(getCurrentEnergy()+damage);
     }
 }

@@ -27,6 +27,7 @@ public class Const {
     public static final double JUMP_SPEED = Double.parseDouble(prop.getProperty("JUMP_SPEED"));
     public static final double MAX_DROP = Double.parseDouble(prop.getProperty("MAX_DROP"));
     public static final int KILL_ENERGY = Integer.parseInt(prop.getProperty("KILL_ENERGY"));
+    public static final int RESPAWN_INVINCIBLE = Integer.parseInt(prop.getProperty("RESPAWN_INVINCIBLE"));
 
     public static final String PLATFORM_PATH = prop.getProperty("PLATFORM_PATH");
 
@@ -74,4 +75,8 @@ public class Const {
     public static final int ROOF_TOP_WIND = Integer.parseInt(prop.getProperty("ROOF_TOP_WIND"));
     public static final int ROOF_TOP_WIND_CD = Integer.parseInt(prop.getProperty("ROOF_TOP_WIND_CD"));
     public static final int ROOF_TOP_WARNING = Integer.parseInt(prop.getProperty("ROOF_TOP_WARNING"));
+    public static final int ROOF_TOP_BOX_CD = Integer.parseInt(prop.getProperty("ROOF_TOP_BOX_CD"));
+
+    public static final int DOOMSHROOM_DAMAGE = Integer.parseInt(prop.getProperty("DOOMSHROOM_DAMAGE"));
+    public static final int DOOMSHROOM_DISTANCE = Integer.parseInt(prop.getProperty("DOOMSHROOM_DISTANCE"));
 }

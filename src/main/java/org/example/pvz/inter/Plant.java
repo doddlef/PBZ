@@ -24,6 +24,7 @@ public abstract class Plant extends Sprite{
     private boolean isDefended = false;
     private boolean shieldBroken = false;
     private int dizzy = 0;
+    private int invincible = 0;
 
     private int primaryCooldown = 0;
     private int primaryCountDown = 0;
@@ -70,7 +71,7 @@ public abstract class Plant extends Sprite{
     }
 
     public void primaryPress(){
-        if(primaryCountDown == 0){
+        if(primaryCountDown == 0 && this.isFree()){
             primaryCountDown = primaryCooldown;
             primary();
         }
@@ -79,7 +80,7 @@ public abstract class Plant extends Sprite{
     public void primaryRelease(){}
 
     public void ultimatePress(){
-        if(currentEnergy >= ultimateEnergy){
+        if(currentEnergy >= ultimateEnergy && this.isFree()){
             currentEnergy = 0;
             ultimate();
         }
@@ -115,6 +116,7 @@ public abstract class Plant extends Sprite{
         if(!this.isDefended && currentShield < Const.MAX_SHIELD){
             this.currentShield++;
         }
+        if(this.invincible > 0) this.invincible--;
         if(this.currentShield == Const.MAX_SHIELD){
             this.shieldBroken = false;
         }
@@ -180,7 +182,7 @@ public abstract class Plant extends Sprite{
 
     @Override
     public void paint() {
-        super.paint();
+        if(this.invincible <= 0 || this.invincible%8 < 4) super.paint();
 
         GraphicsContext pen = getGameScene().getGraphicsContext();
         if(getTeamTag() == 1) {
@@ -270,17 +272,23 @@ public abstract class Plant extends Sprite{
     }
 
     public void takeDamage(int damage) {
-        if(this.isDefended && this.currentShield > 0)
+        if(this.invincible > 0){
+            this.currentEnergy += damage;
+        } else if(this.isDefended && this.currentShield > 0){
+            if(this.currentShield < damage) damage = this.currentShield;
             this.currentShield -= damage;
-        else
+
+            this.currentEnergy += damage;
+        } else {
             this.currentHp -= damage;
+        }
 
         if(this.currentShield <= 0) {
             this.isDefended = false;
             this.shieldBroken = true;
 //            this.beDizzy(Const.SHIELD_BREAK_DIZZY);
         }
-        this.currentEnergy += damage;
+
     }
 
     public void makeDamage(Plant other, int damage) {
@@ -302,6 +310,8 @@ public abstract class Plant extends Sprite{
         this.setAlive(true);
         this.jumped = true;
         this.primaryCountDown = 0;
+
+        this.invincible = Const.RESPAWN_INVINCIBLE;
     }
 
     @Override
@@ -319,7 +329,7 @@ public abstract class Plant extends Sprite{
 //    }
 
     public void beDizzy(int time){
-        if(this.isDefended) return;
+        if(this.isDefended || this.invincible > 0) return;
         if(this.dizzy == 0 && time > 0)
             getGameScene().addStatus(new Dizzy(this));
         if(time > this.dizzy) this.dizzy = time;
@@ -330,6 +340,7 @@ public abstract class Plant extends Sprite{
     }
 
     public void beKnockUp(double x, double y){
+        if(this.invincible > 0) return;
         this.setXSpeed(x);
         this.setYSpeed(y);
     }
