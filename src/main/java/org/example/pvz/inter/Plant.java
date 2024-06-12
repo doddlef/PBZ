@@ -330,7 +330,6 @@ public abstract class Plant extends Sprite{
     }
 
     public void beKnockUp(double x, double y){
-        if(this.isDefended) return;
         this.setXSpeed(x);
         this.setYSpeed(y);
     }

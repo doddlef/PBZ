@@ -26,12 +26,15 @@ public class Box extends Sprite{
         if(oldY+ plant.getHeight()-1 < this.getBounds().getMinY()){
             plant.setY(this.getBounds().getMinY() - plant.getHeight()+1);
             plant.onGround();
+            plant.setYSpeed(0);
         }
         if(oldX + plant.getWidth()-1 < this.getBounds().getMinX()){
             plant.setX(this.getBounds().getMinX() - plant.getWidth());
+            plant.setXSpeed(0);
         }
         if(oldX+1 > this.getBounds().getMinX()+this.getBounds().getWidth()){
             plant.setX(this.getBounds().getMinX()+this.getBounds().getWidth());
+            plant.setXSpeed(0);
         }
     }
 

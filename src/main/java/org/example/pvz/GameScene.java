@@ -10,12 +10,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import org.example.pvz.box.CloudBox;
-import org.example.pvz.box.Platform;
 import org.example.pvz.inter.*;
+import org.example.pvz.map.RoofTop;
 import org.example.pvz.plant.PeaShooter;
 import org.example.pvz.plant.Sunflower;
 import org.example.pvz.stick.PlantFood;
+import org.example.pvz.stick.Score;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,9 +44,12 @@ public class GameScene {
     private List<Bullet> bulletsCache = new ArrayList<>(16);
     private List<Status> statusesCache = new ArrayList<>(16);
 
-    private GameObject background = new Background(this);
+    private GameMap gameMap;
     private Plant plantA = new PeaShooter(300, 40);
     private Plant plantB = new PeaShooter(600, 40);
+
+    private int pointA = 0;
+    private int pointB = 0;
 
     public GameScene(GameDirector gameDirector) {
         this.gameDirector = gameDirector;
@@ -61,20 +64,13 @@ public class GameScene {
 
         updater.setCycleCount(Animation.INDEFINITE);
 
+        // set
+        this.setMap(new RoofTop());
         Plant plantA = new PeaShooter(300, 40);
         Plant plantB = new Sunflower(600, 40);
 
         setPlantA(plantA);
         setPlantB(plantB);
-
-        Box platform = new Platform(300, 375, 400, 20);
-        addBox(platform);
-
-        Box base = new Platform(100, 570, 800, 100);
-        addBox(base);
-
-        Box test = new Platform(300, 540, 50, 30);
-        addBox(test);
 
         resume();
 
@@ -82,6 +78,7 @@ public class GameScene {
     }
 
     private void update(){
+        gameMap.update();
         if(plantA.isAlive()) plantA.update();
         else whenPlantDead(plantA);
         if(plantB.isAlive()) plantB.update();
@@ -132,8 +129,7 @@ public class GameScene {
 
         // paint
 //        pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        background.paint();
-
+        gameMap.paint();
         plantA.paint();
         plantB.paint();
 
@@ -234,16 +230,25 @@ public class GameScene {
         return null;
     }
 
+    public List<Plant> getAllPlant(){
+        return List.of(plantA, plantB);
+    }
+
     private void whenPlantDead(Plant plant){
         if(plant.getTeamTag() == 1){
-            plant.respawn(300, 40);
-            Box cloud = new CloudBox(275, 120);
-            addBox(cloud);
+            pointB++;
+            plantB.setCurrentEnergy(plantB.getCurrentEnergy()+Const.KILL_ENERGY);
         } else {
-            plant.respawn(600, 40);
-            Box cloud = new CloudBox(575, 120);
-            addBox(cloud);
+            pointA++;
+            plantA.setCurrentEnergy(plantA.getCurrentEnergy()+Const.KILL_ENERGY);
         }
+        addStatus(new Score(pointA, pointB));
+        gameMap.respawn(plant);
+    }
+
+    public void setMap(GameMap map){
+        this.gameMap = map;
+        map.init(this);
     }
 
 //    public MediaPlayer getMediaPlayer() {

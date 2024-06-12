@@ -31,6 +31,7 @@ public class TorchWood extends Box {
     private int hp = Const.TORCH_WOOD_HP;
     private int timeIndex = Const.TORCH_LIFE_INDEX;
     private int teamTag;
+    private boolean onGround = false;
 
     public TorchWood(double x, double y, Plant parent) {
         super(animations, x, y, 73, 87);
@@ -66,8 +67,7 @@ public class TorchWood extends Box {
     @Override
     public void paint() {
         super.paint();
-        getGameScene().getGraphicsContext()
-                .drawImage(cloud, getX()-5, getY()+60);
+        if(!onGround) getGameScene().getGraphicsContext().drawImage(cloud, getX()-5, getY()+60);
     }
 
     @Override
@@ -84,5 +84,8 @@ public class TorchWood extends Box {
     @Override
     public void setGameScene(GameScene gameScene) {
         super.setGameScene(gameScene);
+        List<Box> collide = getGameScene().collideBox(new Rectangle2D(this.getX(),
+                this.getY()+87, 86, 20));
+        this.onGround = !collide.isEmpty();
     }
 }

@@ -26,6 +26,7 @@ public class Const {
     public static final double GRAVITY = Double.parseDouble(prop.getProperty("GRAVITY"));
     public static final double JUMP_SPEED = Double.parseDouble(prop.getProperty("JUMP_SPEED"));
     public static final double MAX_DROP = Double.parseDouble(prop.getProperty("MAX_DROP"));
+    public static final int KILL_ENERGY = Integer.parseInt(prop.getProperty("KILL_ENERGY"));
 
     public static final String PLATFORM_PATH = prop.getProperty("PLATFORM_PATH");
 
@@ -69,4 +70,8 @@ public class Const {
     public static final int TORCH_LIFE_INDEX = Integer.parseInt(prop.getProperty("TORCH_LIFE_INDEX"));
 
     public static final Rectangle2D EMPTY_RECT = new Rectangle2D(0, 0, 0, 0);
+
+    public static final int ROOF_TOP_WIND = Integer.parseInt(prop.getProperty("ROOF_TOP_WIND"));
+    public static final int ROOF_TOP_WIND_CD = Integer.parseInt(prop.getProperty("ROOF_TOP_WIND_CD"));
+    public static final int ROOF_TOP_WARNING = Integer.parseInt(prop.getProperty("ROOF_TOP_WARNING"));
 }

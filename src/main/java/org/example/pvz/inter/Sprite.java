@@ -58,8 +58,8 @@ public abstract class Sprite implements GameObject{
             frameIndex = 0;
         }
 
-//        gameScene.getGraphicsContext().fillRect(this.bounds.getMinX(), this.bounds.getMinY(),
-//                this.bounds.getWidth(), this.bounds.getHeight());
+        gameScene.getGraphicsContext().fillRect(this.bounds.getMinX(), this.bounds.getMinY(),
+                this.bounds.getWidth(), this.bounds.getHeight());
         if(this.toRight){
             gameScene.getGraphicsContext().drawImage(animations.get(animationIndex).get(frameIndex),
                     x, y, width, height);
