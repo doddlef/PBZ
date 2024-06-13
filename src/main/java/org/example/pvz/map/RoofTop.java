@@ -1,6 +1,8 @@
 package org.example.pvz.map;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import org.example.pvz.Const;
 import org.example.pvz.GameScene;
 import org.example.pvz.box.CloudBox;
@@ -22,6 +24,9 @@ public class RoofTop implements GameMap {
 
     private GameScene gameScene;
 
+    private Media backgroundMusic = new Media(getClass().getResource("/org/example/sound/roofTop/battle.mp3")
+            .toString());
+    private MediaPlayer backgroundMusicPlayer = new MediaPlayer(backgroundMusic);
     private int direction = 0;
     private int windCountDown = Const.ROOF_TOP_WIND_CD;
     private int giftCountDown = Const.ROOF_TOP_BOX_CD;
@@ -75,6 +80,7 @@ public class RoofTop implements GameMap {
         Box platform = new Platform(300, 300, 400, 30);
         gameScene.addBox(platform);
 
+        backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 //        platform = new Platform(150, 250, 200, 30);
 //        gameScene.addBox(platform);
 //
@@ -93,6 +99,26 @@ public class RoofTop implements GameMap {
             Box cloud = new CloudBox(700, 200);
             gameScene.addBox(cloud);
         }
+    }
+
+    @Override
+    public void pause() {
+        backgroundMusicPlayer.pause();
+    }
+
+    @Override
+    public void resume() {
+        backgroundMusicPlayer.play();
+    }
+
+    @Override
+    public void start() {
+        backgroundMusicPlayer.play();
+    }
+
+    @Override
+    public void end() {
+        backgroundMusicPlayer.stop();
     }
 
     public GameScene getGameScene() {

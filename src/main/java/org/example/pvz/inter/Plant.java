@@ -21,6 +21,7 @@ public abstract class Plant extends Sprite{
     private int maxHp;
     private int currentHp;
     private int currentShield;
+    private int shieldIndex = Const.SHIELD_RECOVER;
     private boolean isDefended = false;
     private boolean shieldBroken = false;
     private int dizzy = 0;
@@ -114,7 +115,11 @@ public abstract class Plant extends Sprite{
 
     public void updateStatus(){
         if(!this.isDefended && currentShield < Const.MAX_SHIELD){
-            this.currentShield++;
+            this.shieldIndex--;
+            if(this.shieldIndex <= 0){
+                this.currentShield++;
+                this.shieldIndex = Const.SHIELD_RECOVER;
+            }
         }
         if(this.invincible > 0) this.invincible--;
         if(this.currentShield == Const.MAX_SHIELD){

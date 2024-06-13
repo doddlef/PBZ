@@ -2,6 +2,12 @@ package org.example.pvz;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.example.pvz.inter.GameMap;
+import org.example.pvz.inter.Plant;
+import org.example.pvz.inter.PlantController;
+import org.example.pvz.map.RoofTop;
+import org.example.pvz.plant.PeaShooter;
+import org.example.pvz.plant.Sunflower;
 
 public class GameDirector {
     private static GameDirector instance = new GameDirector();
@@ -21,7 +27,14 @@ public class GameDirector {
         Scene scene = new Scene(instance.gameScene.getRoot());
         instance.stage.setScene(scene);
         instance.stage.show();
-        instance.gameScene.loadGame();
+
+        Plant plantA = new PeaShooter(300, 40);
+        PlantController controllerA = LocalPlantController.getLocalPlayerOne();
+        Plant plantB = new Sunflower(600, 40);
+        PlantController controllerB = LocalPlantController.getLocalPlayerTwo();
+        GameMap gameMap = new RoofTop();
+
+        instance.gameScene.loadGame(gameMap, plantA, controllerA, plantB, controllerB);
 
     }
 

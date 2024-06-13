@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -56,7 +57,11 @@ public class GameScene {
         this.root.getChildren().add(canvas);
     }
 
-    public void loadGame(){
+    public void loadGame(GameMap gameMap, Plant plantA, PlantController controllerA,
+                         Plant plantB, PlantController controllerB){
+        this.setMap(gameMap);
+        this.setPlantA(plantA, controllerA);
+        this.setPlantB(plantB, controllerB);
         this.running = true;
 
         gameDirector.getStage().getScene().setOnKeyPressed(this::keyProcess);
@@ -64,17 +69,13 @@ public class GameScene {
 
         updater.setCycleCount(Animation.INDEFINITE);
 
-        // set
-        this.setMap(new RoofTop());
-        Plant plantA = new PeaShooter(300, 40);
-        Plant plantB = new Sunflower(600, 40);
+        startGame();
+    }
 
-        setPlantA(plantA);
-        setPlantB(plantB);
-
-        resume();
-
-        pen.setFill(Color.RED);
+    public void startGame(){
+        this.running = true;
+        updater.play();
+        gameMap.start();
     }
 
     private void update(){
@@ -139,6 +140,13 @@ public class GameScene {
     }
 
     private void keyProcess(KeyEvent event){
+        if(event.getEventType() == KeyEvent.KEY_PRESSED){
+            if(event.getCode() == KeyCode.ESCAPE) {
+                if(running) pause();
+                else resume();
+            }
+        }
+        if(!running) return;
         controllerA.reactKeyEvent(event);
         controllerB.reactKeyEvent(event);
     }
@@ -146,10 +154,12 @@ public class GameScene {
     public void resume() {
         this.running = true;
         updater.play();
+        gameMap.resume();
     }
     public void pause() {
         this.running = false;
         updater.pause();
+        gameMap.pause();
     }
     public GraphicsContext getGraphicsContext(){
         return pen;
@@ -183,11 +193,12 @@ public class GameScene {
         return result;
     }
 
-    public void setPlantA(Plant plant){
+    public void setPlantA(Plant plant, PlantController controller){
         this.plantA = plant;
+        this.controllerA = controller;
+
         plantA.setGameScene(this);
         plantA.setTeamTag(1);
-        controllerA = LocalPlantController.getLocalPlayerOne();
         controllerA.setPlant(plantA);
 
         Status plantFood = PlantFood.create(plant);
@@ -196,11 +207,12 @@ public class GameScene {
         plantA.respawn(300, 40);
     }
 
-    public void setPlantB(Plant plant){
+    public void setPlantB(Plant plant, PlantController controller){
         this.plantB = plant;
+        this.controllerB = controller;
+
         plantB.setGameScene(this);
         plantB.setTeamTag(2);
-        controllerB = LocalPlantController.getLocalPlayerTwo();
         controllerB.setPlant(plantB);
 
         Status plantFood = PlantFood.create(plant);
@@ -242,7 +254,7 @@ public class GameScene {
             pointA++;
             plantA.setCurrentEnergy(plantA.getCurrentEnergy()+Const.KILL_ENERGY);
         }
-        addStatus(new Score(pointA, pointB));
+//        addStatus(new Score(pointA, pointB));
         gameMap.respawn(plant);
     }
 

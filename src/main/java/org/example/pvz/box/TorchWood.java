@@ -85,7 +85,7 @@ public class TorchWood extends Box {
     public void setGameScene(GameScene gameScene) {
         super.setGameScene(gameScene);
         List<Box> collide = getGameScene().collideBox(new Rectangle2D(this.getX(),
-                this.getY()+87, 86, 20));
+                this.getY()+87, 86, 5));
         this.onGround = !collide.isEmpty();
     }
 }

@@ -28,6 +28,7 @@ public class Const {
     public static final double MAX_DROP = Double.parseDouble(prop.getProperty("MAX_DROP"));
     public static final int KILL_ENERGY = Integer.parseInt(prop.getProperty("KILL_ENERGY"));
     public static final int RESPAWN_INVINCIBLE = Integer.parseInt(prop.getProperty("RESPAWN_INVINCIBLE"));
+    public static final int SHIELD_RECOVER = Integer.parseInt(prop.getProperty("SHIELD_RECOVER"));
 
     public static final String PLATFORM_PATH = prop.getProperty("PLATFORM_PATH");
 
