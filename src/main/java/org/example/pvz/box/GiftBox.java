@@ -3,6 +3,7 @@ package org.example.pvz.box;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import org.example.pvz.Const;
+import org.example.pvz.bullet.CoffeeBean;
 import org.example.pvz.inter.Box;
 import org.example.pvz.inter.Bullet;
 import org.example.pvz.inter.GameEvent;
@@ -42,6 +43,13 @@ public class GiftBox extends Box {
         return new GiftBox(x, y, hp, event, countDown);
     }
 
+    public static GiftBox coffeeBeanBox(double x, double y, int hp,  int countDown) {
+        GameEvent event = (gameScene, sprite) -> {
+            gameScene.addBullet(new CoffeeBean(sprite.getX()+10, sprite.getY()));
+        };
+        return new GiftBox(x, y, hp, event, countDown);
+    }
+
     @Override
     public void update() {
         super.update();
@@ -73,5 +81,11 @@ public class GiftBox extends Box {
             event.happen(getGameScene(), this);
         }
         return true;
+    }
+
+    @Override
+    public Rectangle2D getBounds() {
+        if(onGround) return super.getBounds();
+        return Const.EMPTY_RECT;
     }
 }

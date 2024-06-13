@@ -28,9 +28,9 @@ public class GameDirector {
         instance.stage.setScene(scene);
         instance.stage.show();
 
-        Plant plantA = new PeaShooter(300, 40);
+        Plant plantA = new PeaShooter(600, 40);
         PlantController controllerA = LocalPlantController.getLocalPlayerOne();
-        Plant plantB = new Sunflower(600, 40);
+        Plant plantB = new PeaShooter(300, 40);
         PlantController controllerB = LocalPlantController.getLocalPlayerTwo();
         GameMap gameMap = new RoofTop();
 

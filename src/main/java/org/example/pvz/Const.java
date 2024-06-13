@@ -71,7 +71,7 @@ public class Const {
     public static final int TORCH_WOOD_HP = Integer.parseInt(prop.getProperty("TORCH_WOOD_HP"));
     public static final int TORCH_LIFE_INDEX = Integer.parseInt(prop.getProperty("TORCH_LIFE_INDEX"));
 
-    public static final Rectangle2D EMPTY_RECT = new Rectangle2D(0, 0, 0, 0);
+    public static final Rectangle2D EMPTY_RECT = new Rectangle2D(-1000, -1000, 0, 0);
 
     public static final int ROOF_TOP_WIND = Integer.parseInt(prop.getProperty("ROOF_TOP_WIND"));
     public static final int ROOF_TOP_WIND_CD = Integer.parseInt(prop.getProperty("ROOF_TOP_WIND_CD"));
@@ -80,4 +80,6 @@ public class Const {
 
     public static final int DOOMSHROOM_DAMAGE = Integer.parseInt(prop.getProperty("DOOMSHROOM_DAMAGE"));
     public static final int DOOMSHROOM_DISTANCE = Integer.parseInt(prop.getProperty("DOOMSHROOM_DISTANCE"));
+
+    public static final int COFFEE_BEAN_ENERGY = Integer.parseInt(prop.getProperty("COFFEE_BEAN_ENERGY"));
 }

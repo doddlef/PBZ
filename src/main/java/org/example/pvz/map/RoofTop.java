@@ -50,8 +50,14 @@ public class RoofTop implements GameMap {
             }
         }
         if(giftCountDown == 0){
-            GiftBox giftBox = GiftBox.doomShroomBox(rand.nextDouble(100, 860),
-                    -50, 100, 200);
+            GiftBox giftBox;
+            if(rand.nextInt(10) > 4) {
+                giftBox = GiftBox.doomShroomBox(rand.nextDouble(100, 860),
+                        -50, 40, 200);
+            } else {
+                giftBox = GiftBox.coffeeBeanBox(rand.nextDouble(100, 860),
+                        -50, 40, 200);
+            }
             getGameScene().addBox(giftBox);
             giftCountDown = Const.ROOF_TOP_BOX_CD;
         }
@@ -81,11 +87,6 @@ public class RoofTop implements GameMap {
         gameScene.addBox(platform);
 
         backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-//        platform = new Platform(150, 250, 200, 30);
-//        gameScene.addBox(platform);
-//
-//        platform = new Platform(650, 250, 200, 30);
-//        gameScene.addBox(platform);
     }
 
     @Override

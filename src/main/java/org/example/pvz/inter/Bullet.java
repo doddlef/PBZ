@@ -11,7 +11,8 @@ public class Bullet extends Sprite{
     public Bullet(List<List<Image>> animations, double x, double y, double width, double height, Plant parent) {
         super(animations, x, y, width, height);
         this.parent = parent;
-        this.teamTag = parent.getTeamTag();
+        if(this.parent == null) this.teamTag = 0;
+        else this.teamTag = parent.getTeamTag();
     }
 
     public Plant getParent() {

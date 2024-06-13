@@ -3,6 +3,7 @@ package org.example.pvz.box;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import org.example.pvz.Const;
+import org.example.pvz.inter.Plant;
 import org.example.pvz.plant.PeaShooter;
 import org.example.pvz.inter.Box;
 
@@ -33,6 +34,14 @@ public class CloudBox extends Box {
 
         if(this.life <= 0){
             this.kill();
+        }
+    }
+
+    public void collide(Plant plant, double oldX, double oldY) {
+        if(oldY+ plant.getHeight()-1 < this.getBounds().getMinY()){
+            plant.setY(this.getBounds().getMinY() - plant.getHeight()+1);
+            plant.onGround();
+            plant.setYSpeed(0);
         }
     }
 
