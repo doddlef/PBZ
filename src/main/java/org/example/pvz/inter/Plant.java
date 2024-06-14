@@ -196,6 +196,15 @@ public abstract class Plant extends Sprite{
     public void paint() {
         if(this.invincible <= 0 || this.invincible%8 < 4) super.paint();
 
+        if(isDefended && this.currentShield > 0){
+            this.pumpkin.defend(this, this.currentShield);
+            this.pumpkin.paint();
+        }
+
+        paintStatus();
+    }
+
+    public void paintStatus(){
         GraphicsContext pen = getGameScene().getGraphicsContext();
         if(getTeamTag() == 1) {
             pen.save();
@@ -227,16 +236,6 @@ public abstract class Plant extends Sprite{
                     29, 100 * currentShield/Const.MAX_SHIELD, 14);
             pen.restore();
         }
-
-        if(isDefended && this.currentShield > 0){
-            this.pumpkin.defend(this, this.currentShield);
-            this.pumpkin.paint();
-        }
-
-        paintStatus();
-    }
-
-    public void paintStatus(){
     }
 
     public double getPlantMaxSpeed(){
@@ -300,7 +299,6 @@ public abstract class Plant extends Sprite{
             this.shieldBroken = true;
 //            this.beDizzy(Const.SHIELD_BREAK_DIZZY);
         }
-
     }
 
     public void makeDamage(Plant other, int damage) {

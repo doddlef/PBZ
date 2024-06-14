@@ -31,5 +31,6 @@ public class Dizzy extends Status {
         this.setX(parent.getX()-10);
         this.setY(parent.getY()-10);
         if(parent.getDizzy() == 0) this.kill();
+        if(!parent.isAlive()) this.kill();
     }
 }

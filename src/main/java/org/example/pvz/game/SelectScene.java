@@ -170,5 +170,7 @@ public class SelectScene implements MyScene{
     @Override
     public void quit() {
         soundEffect.end();
+        gameDirector.getStage().getScene().setOnKeyPressed(null);
+        gameDirector.getStage().getScene().setOnKeyReleased(null);
     }
 }

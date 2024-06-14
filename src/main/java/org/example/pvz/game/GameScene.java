@@ -10,11 +10,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.example.pvz.Const;
+import org.example.pvz.font.FontLoader;
 import org.example.pvz.inter.*;
 import org.example.pvz.plant.PeaShooter;
 import org.example.pvz.stick.PlantFood;
+import org.example.pvz.stick.Score;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,12 +47,16 @@ public class GameScene implements MyScene{
     private List<Bullet> bulletsCache = new ArrayList<>(16);
     private List<Status> statusesCache = new ArrayList<>(16);
 
+    private Score currentScore;
+
     private GameMap gameMap;
     private Plant plantA = new PeaShooter();
     private Plant plantB = new PeaShooter();
 
-    private int pointA = 0;
-    private int pointB = 0;
+    private short pointA = 0;
+    private short aRespawn = 0;
+    private short bRespawn = 0;
+    private short pointB = 0;
 
     public GameScene(GameDirector gameDirector) {
         this.gameDirector = gameDirector;
@@ -82,9 +90,20 @@ public class GameScene implements MyScene{
     private void update(){
         gameMap.update();
         if(plantA.isAlive()) plantA.update();
-        else whenPlantDead(plantA);
+        else if(aRespawn == 0) whenPlantDead(plantA);
+        else if(aRespawn == 1) {
+            gameMap.respawn(plantA);
+            aRespawn = 0;
+        }
+        else aRespawn--;
+
         if(plantB.isAlive()) plantB.update();
-        else whenPlantDead(plantB);
+        else if(bRespawn == 0) whenPlantDead(plantB);
+        else if(bRespawn == 1) {
+            gameMap.respawn(plantB);
+            bRespawn = 0;
+        }
+        else bRespawn--;
 
         if(!boxesCache.isEmpty()) {
             boxes.addAll(boxesCache);
@@ -132,8 +151,10 @@ public class GameScene implements MyScene{
         // paint
 //        pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         gameMap.paint();
-        plantA.paint();
-        plantB.paint();
+        if(plantA.isAlive()) plantA.paint();
+        else plantA.paintStatus();
+        if(plantB.isAlive()) plantB.paint();
+        else plantB.paintStatus();
 
         boxes.forEach(Box::paint);
         bullets.forEach(Bullet::paint);
@@ -161,6 +182,11 @@ public class GameScene implements MyScene{
         this.running = false;
         updater.pause();
         gameMap.pause();
+        pen.save();
+        pen.setFont(FontLoader.getFont(24));
+        pen.setFill(Color.WHITE);
+        pen.fillText("--press ESC to resume--", 300, 400);
+        pen.restore();
     }
     public GraphicsContext getGraphicsContext(){
         return pen;
@@ -251,12 +277,36 @@ public class GameScene implements MyScene{
         if(plant.getTeamTag() == 1){
             pointB++;
             plantB.setCurrentEnergy(plantB.getCurrentEnergy()+Const.KILL_ENERGY);
+            aRespawn = Const.RESPAWN_TIME;
+
+            if(pointB == Const.GAME_AIM) {
+                prepareToEnd();
+            }
         } else {
             pointA++;
             plantA.setCurrentEnergy(plantA.getCurrentEnergy()+Const.KILL_ENERGY);
+            bRespawn = Const.RESPAWN_TIME;
+
+            if(pointA == Const.GAME_AIM) {
+                prepareToEnd();
+            }
         }
-//        addStatus(new Score(pointA, pointB));
-        gameMap.respawn(plant);
+
+        if(currentScore != null) currentScore.kill();
+        currentScore = new Score(pointA, pointB);
+        addStatus(currentScore);
+    }
+
+    private void prepareToEnd(){
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            gameDirector.endScene(pointA, pointB);
+        }));
+        AudioClip clip = new AudioClip("file:src/main/resources/org/example/sound/win.wav");
+        timeline.play();
+        gameMap.pause();
+        clip.play();
+        gameDirector.getStage().getScene().setOnKeyPressed(null);
+        gameDirector.getStage().getScene().setOnKeyReleased(null);
     }
 
     public void setMap(GameMap map){
@@ -269,6 +319,12 @@ public class GameScene implements MyScene{
         this.running = false;
         this.gameMap.end();
         this.updater.stop();
+        gameDirector.getStage().getScene().setOnKeyPressed(null);
+        gameDirector.getStage().getScene().setOnKeyReleased(null);
+    }
+
+    public void clearCurrentScore(){
+        currentScore = null;
     }
 
 //    public MediaPlayer getMediaPlayer() {

@@ -53,6 +53,10 @@ public class GameDirector {
         this.gameScene.loadGame(gameMap, plantA, controllerA, plantB, controllerB);
     }
 
+    public void endScene(short pointA, short pointB){
+        if(currentScene != null){ currentScene.quit();}
+    }
+
     public Stage getStage() {
         return stage;
     }
