@@ -1,29 +1,27 @@
-package org.example.pvz;
+package org.example.pvz.game;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.example.pvz.Const;
 import org.example.pvz.inter.*;
-import org.example.pvz.map.RoofTop;
 import org.example.pvz.plant.PeaShooter;
-import org.example.pvz.plant.Sunflower;
 import org.example.pvz.stick.PlantFood;
-import org.example.pvz.stick.Score;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GameScene {
+public class GameScene implements MyScene{
     public static final double CANVAS_WIDTH = 1000, CANVAS_HEIGHT = 600;
 
     private Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -46,8 +44,8 @@ public class GameScene {
     private List<Status> statusesCache = new ArrayList<>(16);
 
     private GameMap gameMap;
-    private Plant plantA = new PeaShooter(300, 40);
-    private Plant plantB = new PeaShooter(600, 40);
+    private Plant plantA = new PeaShooter();
+    private Plant plantB = new PeaShooter();
 
     private int pointA = 0;
     private int pointB = 0;
@@ -63,6 +61,9 @@ public class GameScene {
         this.setPlantA(plantA, controllerA);
         this.setPlantB(plantB, controllerB);
         this.running = true;
+
+        Scene scene = new Scene(this.getRoot());
+        gameDirector.getStage().setScene(scene);
 
         gameDirector.getStage().getScene().setOnKeyPressed(this::keyProcess);
         gameDirector.getStage().getScene().setOnKeyReleased(this::keyProcess);
@@ -261,6 +262,13 @@ public class GameScene {
     public void setMap(GameMap map){
         this.gameMap = map;
         map.init(this);
+    }
+
+    @Override
+    public void quit() {
+        this.running = false;
+        this.gameMap.end();
+        this.updater.stop();
     }
 
 //    public MediaPlayer getMediaPlayer() {

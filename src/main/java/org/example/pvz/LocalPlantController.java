@@ -139,4 +139,17 @@ public class LocalPlantController implements PlantController {
     public void setUltimateKey(KeyCode ultimateKey) {
         this.ultimateKey = ultimateKey;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("left: " + getLeftKey().getName() + "\n");
+        builder.append("right: " + getRightKey().getName() + "\n");
+        builder.append("jump: " + getJumpKey().getName() + "\n");
+        builder.append("attack: " + getAttackKey() + "\n");
+        builder.append("defend: " + getDefendKey().getName() + "\n");
+        builder.append("primary: " + getPrimaryKey().getName() + "\n");
+        builder.append("ultimate: " + getUltimateKey().getName() + "\n");
+        return builder.toString();
+    }
 }

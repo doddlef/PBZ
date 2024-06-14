@@ -3,7 +3,7 @@ package org.example.pvz.box;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 import org.example.pvz.bullet.FirePea;
 import org.example.pvz.bullet.PeaBullet;
 import org.example.pvz.inter.Box;

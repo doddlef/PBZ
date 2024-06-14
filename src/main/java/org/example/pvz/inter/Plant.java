@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 import org.example.pvz.stick.Dizzy;
 import org.example.pvz.stick.Pumpkin;
 
@@ -36,6 +36,13 @@ public abstract class Plant extends Sprite{
 
     public Plant(List<List<Image>> animations, double x, double y, double width, double height, int maxHp) {
         super(animations, x, y, width, height);
+        this.maxHp = maxHp;
+        this.currentHp = this.maxHp;
+        this.currentShield = Const.MAX_SHIELD;
+    }
+
+    public Plant(List<List<Image>> animations, double width, double height, int maxHp) {
+        super(animations, 0, 0, width, height);
         this.maxHp = maxHp;
         this.currentHp = this.maxHp;
         this.currentShield = Const.MAX_SHIELD;

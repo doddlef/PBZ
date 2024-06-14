@@ -1,7 +1,7 @@
 package org.example.pvz.inter;
 
 
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 
 public interface GameMap extends GameObject{
     void init(GameScene gameScene);

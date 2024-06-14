@@ -3,7 +3,7 @@ package org.example.pvz.plant;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 import org.example.pvz.bullet.Jalapeno;
 import org.example.pvz.bullet.SunBullet;
 import org.example.pvz.inter.Bullet;
@@ -34,8 +34,8 @@ public class Sunflower extends Plant {
 
     private double circleX, circleStep;
 
-    public Sunflower(double x, double y) {
-        super(animations, x, y, 70, 70, Const.SUNFLOWER_HP);
+    public Sunflower() {
+        super(animations, 0, 0, 70, 70, Const.SUNFLOWER_HP);
         this.setPrimaryCooldown(Const.SUNFLOWER_PRIMARY_CD);
         this.setUltimateEnergy(Const.SUNFLOWER_ULTIMATE_ENERGY);
     }

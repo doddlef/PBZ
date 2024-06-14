@@ -1,7 +1,7 @@
 package org.example.pvz.inter;
 
 import javafx.scene.image.Image;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 
 public class Background implements GameObject{
     private static Image image = new Image(Background.class.

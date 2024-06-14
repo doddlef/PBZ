@@ -37,7 +37,7 @@ public class CoffeeBean extends Bullet {
 
     @Override
     public void reactOther(Plant other) {
-        if(this.isAlive() && this.getBounds().intersects(other.getBounds( ))) {
+        if(this.isAlive() && this.getBounds().intersects(other.getBounds())) {
             other.setCurrentEnergy(other.getCurrentEnergy()+ Const.COFFEE_BEAN_ENERGY);
             Status coffeeBean = new CoffeeBeanStatus(other.getX()+other.getWidth()/2-getWidth()/2,
                     other.getY()-20);

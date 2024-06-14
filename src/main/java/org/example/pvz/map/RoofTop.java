@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 import org.example.pvz.box.CloudBox;
 import org.example.pvz.box.GiftBox;
 import org.example.pvz.box.Platform;
@@ -54,6 +54,7 @@ public class RoofTop implements GameMap {
             if(rand.nextInt(10) > 4) {
                 giftBox = GiftBox.doomShroomBox(rand.nextDouble(100, 860),
                         -50, 40, 200);
+                System.out.println("boom");
             } else {
                 giftBox = GiftBox.coffeeBeanBox(rand.nextDouble(100, 860),
                         -50, 40, 200);

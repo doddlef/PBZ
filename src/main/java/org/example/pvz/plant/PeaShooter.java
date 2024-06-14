@@ -3,7 +3,7 @@ package org.example.pvz.plant;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 import org.example.pvz.box.TorchWood;
 import org.example.pvz.bullet.FirePea;
 import org.example.pvz.bullet.PeaBullet;
@@ -43,8 +43,8 @@ public class PeaShooter extends Plant {
         animations.add(frames);
     }
 
-    public PeaShooter(double x, double y) {
-        super(animations, x, y, WIDTH, HEIGHT, Const.PEA_SHOOTER_HP);
+    public PeaShooter() {
+        super(animations, WIDTH, HEIGHT, Const.PEA_SHOOTER_HP);
         this.setPrimaryCooldown(Const.PEA_PRIMARY_CD);
         this.setUltimateEnergy(Const.PEA_ULTIMATE_TIME);
         this.setCurrentEnergy(0);
@@ -110,11 +110,11 @@ public class PeaShooter extends Plant {
             this.attackCooldown = Const.PEA_SHOOTER_ATTACK_COOLDOWN;
             Bullet bullet;
             if(this.combo == 2){
-                bullet = new FirePea(this.getX()+this.getWidth(), this.getY()+5,this);
+                bullet = new FirePea(this.getX()+(this.isToRight()?this.getWidth():0), this.getY()+5,this);
                 combo = 0;
                 comboTime = 0;
             } else {
-                bullet = new PeaBullet(this.getX()+this.getWidth(), this.getY()+5,this);
+                bullet = new PeaBullet(this.getX()+(this.isToRight()?this.getWidth():0), this.getY()+5,this);
                 combo++;
                 comboTime = Const.PEA_COMBO_TIME;
             }

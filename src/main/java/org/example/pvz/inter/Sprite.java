@@ -3,7 +3,7 @@ package org.example.pvz.inter;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 
 import java.util.ArrayList;
 import java.util.List;

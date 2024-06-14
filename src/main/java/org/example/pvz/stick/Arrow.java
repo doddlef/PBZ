@@ -2,7 +2,7 @@ package org.example.pvz.stick;
 
 import javafx.scene.image.Image;
 import org.example.pvz.Const;
-import org.example.pvz.GameScene;
+import org.example.pvz.game.GameScene;
 import org.example.pvz.inter.Status;
 
 import java.util.ArrayList;

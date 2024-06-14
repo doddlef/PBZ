@@ -16,4 +16,6 @@ module org.example.pvz {
     opens org.example.pvz.bullet to javafx.fxml;
     exports org.example.pvz.plant;
     opens org.example.pvz.plant to javafx.fxml;
+    exports org.example.pvz.game;
+    opens org.example.pvz.game to javafx.fxml;
 }
