@@ -1,8 +1,6 @@
 package org.example.pvz.game;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -104,7 +102,17 @@ public class EndScene implements MyScene{
                 },
                 new KeyValue(winnerText.textProperty(), winnerString),
                 new KeyValue(indicateText.textProperty(), "--enter space to continue--"));
+
         timeline.getKeyFrames().addAll(addScoreA, addScoreB, winAnimation);
+        timeline.setOnFinished(event -> {
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), indicateText);
+            fadeTransition.setFromValue(0);
+            fadeTransition.setToValue(1);
+            fadeTransition.setAutoReverse(true);
+            fadeTransition.setCycleCount(Animation.INDEFINITE);
+            fadeTransition.play();
+        });
+
         timeline.play();
     }
 

@@ -9,7 +9,7 @@ public class GameApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         GameDirector.initDirector(primaryStage);
 //        GameDirector.gameStart();
-        GameDirector.getInstance().selectScene();
+        GameDirector.getInstance().pbz();
 //        Selector.getPlantSelector();
     }
 }
