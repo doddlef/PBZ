@@ -1,6 +1,5 @@
 module org.example.pvz {
     requires javafx.controls;
-    requires javafx.fxml;
     requires java.desktop;
     requires java.compiler;
     requires javafx.media;

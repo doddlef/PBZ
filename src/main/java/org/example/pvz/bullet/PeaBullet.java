@@ -21,7 +21,6 @@ public class PeaBullet extends Bullet {
 
     public PeaBullet(double x, double y, Plant parent) {
         super(animations, x, y, 30, 30, parent);
-        setToRight(parent.isToRight());
     }
 
     @Override

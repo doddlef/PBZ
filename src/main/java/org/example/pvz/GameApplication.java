@@ -8,8 +8,6 @@ public class GameApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GameDirector.initDirector(primaryStage);
-//        GameDirector.gameStart();
         GameDirector.getInstance().pbz();
-//        Selector.getPlantSelector();
     }
 }

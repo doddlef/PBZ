@@ -12,7 +12,10 @@ public class Bullet extends Sprite{
         super(animations, x, y, width, height);
         this.parent = parent;
         if(this.parent == null) this.teamTag = 0;
-        else this.teamTag = parent.getTeamTag();
+        else {
+            this.teamTag = parent.getTeamTag();
+            this.setToRight(parent.isToRight());
+        }
     }
 
     public Plant getParent() {

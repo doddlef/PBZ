@@ -31,6 +31,10 @@ public class  Selector {
         name = "org.example.pvz.plant.Sunflower";
         selector.add(image, name);
 
+        image = new Image("file:src/main/resources/org/example/images/Cards/card_starfruit.png");
+        name = "org.example.pvz.plant.StarFruit";
+        selector.add(image, name);
+
         return selector;
     }
 

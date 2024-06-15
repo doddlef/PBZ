@@ -120,6 +120,7 @@ public class Sunflower extends Plant {
     @Override
     public void respawn(int x, int y) {
         super.respawn(x, y);
+        this.attackCooldown = 0;
         this.ammoLeft = Const.SUNFLOWER_AMMO;
         this.inReady = false;
         this.readyAttack = 0;

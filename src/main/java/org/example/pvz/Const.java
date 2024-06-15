@@ -1,6 +1,7 @@
 package org.example.pvz;
 
 import javafx.geometry.Rectangle2D;
+import org.example.pvz.stick.Pumpkin;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -61,6 +62,23 @@ public class Const {
     public static final int SUNFLOWER_RECOVER_SPEED = Integer.parseInt(prop.getProperty("SUNFLOWER_RECOVER_SPEED"));
     public static final int SUNFLOWER_PRIMARY_CD = Integer.parseInt(prop.getProperty("SUNFLOWER_PRIMARY_CD"));
     public static final int SUNFLOWER_ULTIMATE_ENERGY = Integer.parseInt(prop.getProperty("SUNFLOWER_ULTIMATE_ENERGY"));
+
+    public static final int STAR_FRUIT_HP = Integer.parseInt(prop.getProperty("STAR_FRUIT_HP"));
+    public static final int STAR_FRUIT_ATTACK_CD = Integer.parseInt(prop.getProperty("STAR_FRUIT_ATTACK_CD"));
+    public static final double STAR_FRUIT_JUMP_SPEED = Double.parseDouble(prop.getProperty("STAR_FRUIT_JUMP_SPEED"));
+    public static final int STAR_FRUIT_PRIMARY_CD = Integer.parseInt(prop.getProperty("STAR_FRUIT_PRIMARY_CD"));
+    public static final double STAR_FRUIT_DASH_SPEED = Double.parseDouble(prop.getProperty("STAR_FRUIT_DASH_SPEED"));
+    public static final short STAR_FRUIT_DASH_TIME = Short.parseShort(prop.getProperty("STAR_FRUIT_DASH_TIME"));
+    public static final int STAR_FRUIT_ULTIMATE_ENERGY = Integer.parseInt(prop.getProperty("STAR_FRUIT_ULTIMATE_ENERGY"));
+
+    public static final double FRISBEE_SPEED = Double.parseDouble(prop.getProperty("FRISBEE_SPEED"));
+    public static final int FRISBEE_DAMAGE = Integer.parseInt(prop.getProperty("FRISBEE_DAMAGE"));
+    public static final double FRISBEE_KNOCK_BACK = Double.parseDouble(prop.getProperty("FRISBEE_KNOCK_BACK"));
+    public static final int FRISBEE_ENERGY_RECOVER = Integer.parseInt(prop.getProperty("FRISBEE_ENERGY_RECOVER"));
+
+    public static final int STAR_BULLET_DAMAGE = Integer.parseInt(prop.getProperty("STAR_BULLET_DAMAGE"));
+    public static final double STAR_BULLET_SPEED = Double.parseDouble(prop.getProperty("STAR_BULLET_SPEED"));
+    public static final double STAR_BULLET_Y_SPEED = Double.parseDouble(prop.getProperty("STAR_BULLET_Y_SPEED"));
 
     public static final int SUN_COUNT_DOWN = Integer.parseInt(prop.getProperty("SUN_COUNT_DOWN"));
     public static final int SUN_DAMAGE = Integer.parseInt(prop.getProperty("SUN_DAMAGE"));

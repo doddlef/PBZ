@@ -46,6 +46,7 @@ public abstract class Plant extends Sprite{
         this.maxHp = maxHp;
         this.currentHp = this.maxHp;
         this.currentShield = Const.MAX_SHIELD;
+        this.currentEnergy = 0;
     }
 
     public void setLeft(boolean left) {
@@ -147,7 +148,7 @@ public abstract class Plant extends Sprite{
 
         // apply gravity
         if (!onGround) {
-            ySpeed += Const.GRAVITY;
+            ySpeed += getGravity();
             if(ySpeed > Const.MAX_DROP) ySpeed = Const.MAX_DROP;
         }
 
@@ -386,4 +387,22 @@ public abstract class Plant extends Sprite{
     public void setCurrentEnergy(int currentEnergy) {
         this.currentEnergy = currentEnergy;
     }
+
+    public double getGravity(){
+        return Const.GRAVITY;
+    }
+
+    public boolean isJumped() {
+        return jumped;
+    }
+
+    public void setJumped(boolean jumped) {
+        this.jumped = jumped;
+    }
+
+    public void beInvincible(int invincible) {
+        if(invincible > this.invincible) this.invincible = invincible;
+    }
+
+
 }

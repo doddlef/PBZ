@@ -126,6 +126,7 @@ public class PeaShooter extends Plant {
     @Override
     public void respawn(int x, int y) {
         super.respawn(x, y);
+        this.attackCooldown = 0;
         this.ammoLeft = Const.PEA_SHOOTER_AMMO;
         endUltimate();
     }
