@@ -46,7 +46,7 @@ public class PeaShooter extends Plant {
     public PeaShooter() {
         super(animations, WIDTH, HEIGHT, Const.PEA_SHOOTER_HP);
         this.setPrimaryCooldown(Const.PEA_PRIMARY_CD);
-        this.setUltimateEnergy(Const.PEA_ULTIMATE_TIME);
+        this.setUltimateEnergy(Const.PEA_ULTIMATE_ENERGY);
         this.setCurrentEnergy(0);
     }
 

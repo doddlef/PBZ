@@ -47,6 +47,7 @@ public class Const {
     public static final double FIRE_PEA_KNOCK = Double.parseDouble(prop.getProperty("FIRE_PEA_KNOCK"));
     public static final int PEA_PRIMARY_CD = Integer.parseInt(prop.getProperty("PEA_PRIMARY_CD"));
     public static final int PEA_ULTIMATE_TIME = Integer.parseInt(prop.getProperty("PEA_ULTIMATE_TIME"));
+    public static final int PEA_ULTIMATE_ENERGY = Integer.parseInt(prop.getProperty("PEA_ULTIMATE_ENERGY"));
 
     public static final int MAX_SHIELD = Integer.parseInt(prop.getProperty("MAX_SHIELD"));
     public static final int SHIELD_BREAK_DIZZY = Integer.parseInt(prop.getProperty("SHIELD_BREAK_DIZZY"));

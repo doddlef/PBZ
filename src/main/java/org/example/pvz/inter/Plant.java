@@ -288,7 +288,6 @@ public abstract class Plant extends Sprite{
         } else if(this.isDefended && this.currentShield > 0){
             if(this.currentShield < damage) damage = this.currentShield;
             this.currentShield -= damage;
-
             this.currentEnergy += damage;
         } else {
             this.currentHp -= damage;
@@ -303,7 +302,7 @@ public abstract class Plant extends Sprite{
 
     public void makeDamage(Plant other, int damage) {
         other.takeDamage(damage);
-        this.currentEnergy += 2*damage;
+        this.currentEnergy += damage;
     }
 
     public void respawn(int x, int y){

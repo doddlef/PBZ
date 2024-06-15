@@ -24,21 +24,6 @@ public class GameDirector {
         instance.stage = stage;
     }
 
-    public static void gameStart(){
-        instance.gameScene = new GameScene(instance);
-        Scene scene = new Scene(instance.gameScene.getRoot());
-        instance.stage.setScene(scene);
-        instance.stage.show();
-
-        Plant plantA = new Sunflower();
-        PlantController controllerA = LocalPlantController.getLocalPlayerOne();
-        Plant plantB = new PeaShooter();
-        PlantController controllerB = LocalPlantController.getLocalPlayerTwo();
-        GameMap gameMap = new RoofTop();
-
-        instance.gameScene.loadGame(gameMap, plantA, controllerA, plantB, controllerB);
-    }
-
     public void selectScene(){
         if(currentScene != null){ currentScene.quit();}
         SelectScene selectScene = new SelectScene(this);
@@ -50,11 +35,14 @@ public class GameDirector {
                           Plant plantB, PlantController controllerB){
         if(currentScene != null){ currentScene.quit();}
         this.gameScene = new GameScene(this);
-        this.gameScene.loadGame(gameMap, plantA, controllerA, plantB, controllerB);
+        this.gameScene.loadGame((short) 1, gameMap, plantA, controllerA, plantB, controllerB);
     }
 
     public void endScene(short pointA, short pointB){
         if(currentScene != null){ currentScene.quit();}
+        EndScene endScene = new EndScene(this);
+        this.currentScene = endScene;
+        endScene.loadScene(pointA, pointB);
     }
 
     public Stage getStage() {

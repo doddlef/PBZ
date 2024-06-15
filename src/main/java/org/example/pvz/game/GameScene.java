@@ -57,14 +57,18 @@ public class GameScene implements MyScene{
     private short aRespawn = 0;
     private short bRespawn = 0;
     private short pointB = 0;
+    private short aim;
+
+    private boolean ended = false;
 
     public GameScene(GameDirector gameDirector) {
         this.gameDirector = gameDirector;
         this.root.getChildren().add(canvas);
     }
 
-    public void loadGame(GameMap gameMap, Plant plantA, PlantController controllerA,
+    public void loadGame(short aim, GameMap gameMap, Plant plantA, PlantController controllerA,
                          Plant plantB, PlantController controllerB){
+        this.aim = aim;
         this.setMap(gameMap);
         this.setPlantA(plantA, controllerA);
         this.setPlantB(plantB, controllerB);
@@ -279,7 +283,7 @@ public class GameScene implements MyScene{
             plantB.setCurrentEnergy(plantB.getCurrentEnergy()+Const.KILL_ENERGY);
             aRespawn = Const.RESPAWN_TIME;
 
-            if(pointB == Const.GAME_AIM) {
+            if(pointB == this.aim) {
                 prepareToEnd();
             }
         } else {
@@ -287,7 +291,7 @@ public class GameScene implements MyScene{
             plantA.setCurrentEnergy(plantA.getCurrentEnergy()+Const.KILL_ENERGY);
             bRespawn = Const.RESPAWN_TIME;
 
-            if(pointA == Const.GAME_AIM) {
+            if(pointA == this.aim) {
                 prepareToEnd();
             }
         }
@@ -298,8 +302,13 @@ public class GameScene implements MyScene{
     }
 
     private void prepareToEnd(){
+        if(ended ) return;
+        ended = true;
+
+        short a = pointA;
+        short b = pointB;
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
-            gameDirector.endScene(pointA, pointB);
+            gameDirector.endScene(a, b);
         }));
         AudioClip clip = new AudioClip("file:src/main/resources/org/example/sound/win.wav");
         timeline.play();
